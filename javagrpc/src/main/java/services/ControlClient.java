@@ -2,6 +2,7 @@ package services;
 
 import msg.grpc.Response;
 import msg.grpc.Block;
+import msg.grpc.Point;
 import msg.grpc.ControlCmd;
 import msg.grpc.MsgServicesGrpc.MsgServicesBlockingStub;
 import msg.grpc.MsgServicesGrpc;
@@ -35,7 +36,7 @@ public class ControlClient {
 		CUBE, CYLINDER
 	};
 	
-	public static Block SetBlock(BlockType type, double w, double h) {
+	public static Block SetBlock(BlockType type, double w, double h, double posx, double posy) {
 		/*
 		 * this function accept the parameters of a block and return a value in Block structure.
 		 * if type is cube, then w means width, h means height.
@@ -45,7 +46,12 @@ public class ControlClient {
 		if(type == BlockType.CYLINDER) {
 			tp = Block.Type.CYLINDER;
 		}
-		Block block = Block.newBuilder().setType(tp).setW(w).setH(h).build();
+		Block block = Block.newBuilder()
+				.setType(tp)
+				.setW(w)
+				.setH(h)
+				.setPos(Point.newBuilder().setPosx(posx).setPosy(posy).build())
+				.build();
 		return block;
 	}
 	

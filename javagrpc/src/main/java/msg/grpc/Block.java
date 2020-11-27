@@ -65,6 +65,19 @@ private static final long serialVersionUID = 0L;
             h_ = input.readDouble();
             break;
           }
+          case 34: {
+            msg.grpc.Point.Builder subBuilder = null;
+            if (pos_ != null) {
+              subBuilder = pos_.toBuilder();
+            }
+            pos_ = input.readMessage(msg.grpc.Point.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(pos_);
+              pos_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -239,6 +252,27 @@ private static final long serialVersionUID = 0L;
     return h_;
   }
 
+  public static final int POS_FIELD_NUMBER = 4;
+  private msg.grpc.Point pos_;
+  /**
+   * <code>.msg.Point pos = 4;</code>
+   */
+  public boolean hasPos() {
+    return pos_ != null;
+  }
+  /**
+   * <code>.msg.Point pos = 4;</code>
+   */
+  public msg.grpc.Point getPos() {
+    return pos_ == null ? msg.grpc.Point.getDefaultInstance() : pos_;
+  }
+  /**
+   * <code>.msg.Point pos = 4;</code>
+   */
+  public msg.grpc.PointOrBuilder getPosOrBuilder() {
+    return getPos();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -262,6 +296,9 @@ private static final long serialVersionUID = 0L;
     if (h_ != 0D) {
       output.writeDouble(3, h_);
     }
+    if (pos_ != null) {
+      output.writeMessage(4, getPos());
+    }
     unknownFields.writeTo(output);
   }
 
@@ -282,6 +319,10 @@ private static final long serialVersionUID = 0L;
     if (h_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
         .computeDoubleSize(3, h_);
+    }
+    if (pos_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(4, getPos());
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -308,6 +349,11 @@ private static final long serialVersionUID = 0L;
         java.lang.Double.doubleToLongBits(getH())
         == java.lang.Double.doubleToLongBits(
             other.getH()));
+    result = result && (hasPos() == other.hasPos());
+    if (hasPos()) {
+      result = result && getPos()
+          .equals(other.getPos());
+    }
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -327,6 +373,10 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + H_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         java.lang.Double.doubleToLongBits(getH()));
+    if (hasPos()) {
+      hash = (37 * hash) + POS_FIELD_NUMBER;
+      hash = (53 * hash) + getPos().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -470,6 +520,12 @@ private static final long serialVersionUID = 0L;
 
       h_ = 0D;
 
+      if (posBuilder_ == null) {
+        pos_ = null;
+      } else {
+        pos_ = null;
+        posBuilder_ = null;
+      }
       return this;
     }
 
@@ -499,6 +555,11 @@ private static final long serialVersionUID = 0L;
       result.type_ = type_;
       result.w_ = w_;
       result.h_ = h_;
+      if (posBuilder_ == null) {
+        result.pos_ = pos_;
+      } else {
+        result.pos_ = posBuilder_.build();
+      }
       onBuilt();
       return result;
     }
@@ -555,6 +616,9 @@ private static final long serialVersionUID = 0L;
       }
       if (other.getH() != 0D) {
         setH(other.getH());
+      }
+      if (other.hasPos()) {
+        mergePos(other.getPos());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -695,6 +759,123 @@ private static final long serialVersionUID = 0L;
       h_ = 0D;
       onChanged();
       return this;
+    }
+
+    private msg.grpc.Point pos_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        msg.grpc.Point, msg.grpc.Point.Builder, msg.grpc.PointOrBuilder> posBuilder_;
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public boolean hasPos() {
+      return posBuilder_ != null || pos_ != null;
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public msg.grpc.Point getPos() {
+      if (posBuilder_ == null) {
+        return pos_ == null ? msg.grpc.Point.getDefaultInstance() : pos_;
+      } else {
+        return posBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public Builder setPos(msg.grpc.Point value) {
+      if (posBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        pos_ = value;
+        onChanged();
+      } else {
+        posBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public Builder setPos(
+        msg.grpc.Point.Builder builderForValue) {
+      if (posBuilder_ == null) {
+        pos_ = builderForValue.build();
+        onChanged();
+      } else {
+        posBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public Builder mergePos(msg.grpc.Point value) {
+      if (posBuilder_ == null) {
+        if (pos_ != null) {
+          pos_ =
+            msg.grpc.Point.newBuilder(pos_).mergeFrom(value).buildPartial();
+        } else {
+          pos_ = value;
+        }
+        onChanged();
+      } else {
+        posBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public Builder clearPos() {
+      if (posBuilder_ == null) {
+        pos_ = null;
+        onChanged();
+      } else {
+        pos_ = null;
+        posBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public msg.grpc.Point.Builder getPosBuilder() {
+      
+      onChanged();
+      return getPosFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    public msg.grpc.PointOrBuilder getPosOrBuilder() {
+      if (posBuilder_ != null) {
+        return posBuilder_.getMessageOrBuilder();
+      } else {
+        return pos_ == null ?
+            msg.grpc.Point.getDefaultInstance() : pos_;
+      }
+    }
+    /**
+     * <code>.msg.Point pos = 4;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        msg.grpc.Point, msg.grpc.Point.Builder, msg.grpc.PointOrBuilder> 
+        getPosFieldBuilder() {
+      if (posBuilder_ == null) {
+        posBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            msg.grpc.Point, msg.grpc.Point.Builder, msg.grpc.PointOrBuilder>(
+                getPos(),
+                getParentForChildren(),
+                isClean());
+        pos_ = null;
+      }
+      return posBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

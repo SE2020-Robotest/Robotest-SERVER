@@ -30,4 +30,17 @@ public interface BlockOrBuilder extends
    * <code>double h = 3;</code>
    */
   double getH();
+
+  /**
+   * <code>.msg.Point pos = 4;</code>
+   */
+  boolean hasPos();
+  /**
+   * <code>.msg.Point pos = 4;</code>
+   */
+  msg.grpc.Point getPos();
+  /**
+   * <code>.msg.Point pos = 4;</code>
+   */
+  msg.grpc.PointOrBuilder getPosOrBuilder();
 }

@@ -80,28 +80,28 @@ public final class Msg {
       "\022\027\n\003pos\030\001 \003(\0132\n.msg.Point\022\021\n\tstarttime\030\002" +
       " \001(\005\022\017\n\007endtime\030\003 \001(\005\"\031\n\tVoiceData\022\014\n\004fi" +
       "le\030\001 \001(\014\",\n\010VoiceStr\022\r\n\005voice\030\001 \001(\t\022\021\n\tt" +
-      "imestamp\030\002 \001(\005\"\\\n\005Block\022\035\n\004type\030\001 \001(\0162\017." +
-      "msg.Block.Type\022\t\n\001w\030\002 \001(\001\022\t\n\001h\030\003 \001(\001\"\036\n\004" +
-      "Type\022\010\n\004CUBE\020\000\022\014\n\010CYLINDER\020\001\"H\n\003Map\022\021\n\tr" +
-      "oomwidth\030\001 \001(\001\022\022\n\nroomheight\030\002 \001(\001\022\032\n\006bl" +
-      "ocks\030\003 \003(\0132\n.msg.Block\"_\n\nControlCmd\022$\n\003" +
-      "cmd\030\001 \001(\0162\027.msg.ControlCmd.CtrlCmd\"+\n\007Ct" +
-      "rlCmd\022\t\n\005START\020\000\022\010\n\004STOP\020\001\022\013\n\007CONNECT\020\002\"" +
-      "p\n\005Drive\022%\n\010drivecmd\030\001 \001(\0162\023.msg.Drive.D" +
-      "riveCmd\"@\n\010DriveCmd\022\t\n\005FRONT\020\000\022\010\n\004BACK\020\001" +
-      "\022\010\n\004LEFT\020\002\022\t\n\005RIGHT\020\003\022\n\n\006ROTATE\020\004\"[\n\010Res" +
-      "ponse\022$\n\006status\030\001 \001(\0162\024.msg.Response.Sta" +
-      "tus\")\n\006Status\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001\022\014\n\010FINI" +
-      "SHED\020\0022\315\002\n\013MsgServices\022$\n\tConfigMap\022\010.ms" +
-      "g.Map\032\r.msg.Response\022/\n\rRobotPosition\022\017." +
-      "msg.RBPosition\032\r.msg.Response\022\'\n\tRobotPa" +
-      "th\022\013.msg.RBPath\032\r.msg.Response\0220\n\rSendVo" +
-      "iceFile\022\016.msg.VoiceData\032\r.msg.Response(\001" +
-      "\022+\n\013VoiceResult\022\r.msg.VoiceStr\032\r.msg.Res" +
-      "ponse\0220\n\016ControlCommand\022\017.msg.ControlCmd" +
-      "\032\r.msg.Response\022-\n\rRobotFinished\022\r.msg.R" +
-      "esponse\032\r.msg.ResponseB\014\n\010msg.grpcP\001b\006pr" +
-      "oto3"
+      "imestamp\030\002 \001(\005\"u\n\005Block\022\035\n\004type\030\001 \001(\0162\017." +
+      "msg.Block.Type\022\t\n\001w\030\002 \001(\001\022\t\n\001h\030\003 \001(\001\022\027\n\003" +
+      "pos\030\004 \001(\0132\n.msg.Point\"\036\n\004Type\022\010\n\004CUBE\020\000\022" +
+      "\014\n\010CYLINDER\020\001\"H\n\003Map\022\021\n\troomwidth\030\001 \001(\001\022" +
+      "\022\n\nroomheight\030\002 \001(\001\022\032\n\006blocks\030\003 \003(\0132\n.ms" +
+      "g.Block\"_\n\nControlCmd\022$\n\003cmd\030\001 \001(\0162\027.msg" +
+      ".ControlCmd.CtrlCmd\"+\n\007CtrlCmd\022\t\n\005START\020" +
+      "\000\022\010\n\004STOP\020\001\022\013\n\007CONNECT\020\002\"p\n\005Drive\022%\n\010dri" +
+      "vecmd\030\001 \001(\0162\023.msg.Drive.DriveCmd\"@\n\010Driv" +
+      "eCmd\022\t\n\005FRONT\020\000\022\010\n\004BACK\020\001\022\010\n\004LEFT\020\002\022\t\n\005R" +
+      "IGHT\020\003\022\n\n\006ROTATE\020\004\"[\n\010Response\022$\n\006status" +
+      "\030\001 \001(\0162\024.msg.Response.Status\")\n\006Status\022\006" +
+      "\n\002OK\020\000\022\t\n\005ERROR\020\001\022\014\n\010FINISHED\020\0022\315\002\n\013MsgS" +
+      "ervices\022$\n\tConfigMap\022\010.msg.Map\032\r.msg.Res" +
+      "ponse\022/\n\rRobotPosition\022\017.msg.RBPosition\032" +
+      "\r.msg.Response\022\'\n\tRobotPath\022\013.msg.RBPath" +
+      "\032\r.msg.Response\0220\n\rSendVoiceFile\022\016.msg.V" +
+      "oiceData\032\r.msg.Response(\001\022+\n\013VoiceResult" +
+      "\022\r.msg.VoiceStr\032\r.msg.Response\0220\n\016Contro" +
+      "lCommand\022\017.msg.ControlCmd\032\r.msg.Response" +
+      "\022-\n\rRobotFinished\022\r.msg.Response\032\r.msg.R" +
+      "esponseB\014\n\010msg.grpcP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -150,7 +150,7 @@ public final class Msg {
     internal_static_msg_Block_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_msg_Block_descriptor,
-        new java.lang.String[] { "Type", "W", "H", });
+        new java.lang.String[] { "Type", "W", "H", "Pos", });
     internal_static_msg_Map_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_msg_Map_fieldAccessorTable = new
