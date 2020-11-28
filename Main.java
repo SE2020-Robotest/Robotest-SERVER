@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
@@ -56,7 +57,7 @@ public class Main extends Application {
 				System.out.println(file.getAbsolutePath());
 				try {
 					Env.read(file);
-					Env.initial_position(2, 3, 45);
+					//Env.initial_position(2, 3, 45);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -97,7 +98,7 @@ public class Main extends Application {
 		root.getChildren().add(b5.button);
 		root.getChildren().add(b6.button);
 		
-		TextField text=new TextField();
+		TextArea text=new TextArea();
 		Tooltip tip2 = new Tooltip("测试文本框");
 		tip2.setFont(Font.font(40));
 		text.setTooltip(tip2);
@@ -105,16 +106,16 @@ public class Main extends Application {
 		text.setLayoutY(500);
 		text.setPrefWidth(550);
 		text.setPrefHeight(270);
-		
-		text.textProperty().addListener(new ChangeListener<String>() {
-
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldvalue, String newvalue) {
-				text.deleteText(0,oldvalue.length());
-				text.appendText(newvalue);
-				// TODO Auto-generated method stub
-				
-			}});
+		text.setWrapText(true);
+//		text.textProperty().addListener(new ChangeListener<String>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends String> observable, String oldvalue, String newvalue) {
+//				text.deleteText(0,oldvalue.length());
+//				text.appendText(newvalue);
+//				// TODO Auto-generated method stub
+//				
+//			}});
 		root.getChildren().add(text);
 //		test.setOnKeyPressed(new EventHandler<KeyEvent>(){
 //
