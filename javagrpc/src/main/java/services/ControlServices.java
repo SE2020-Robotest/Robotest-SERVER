@@ -9,7 +9,16 @@ import msg.grpc.Point;
 import msg.grpc.MsgServicesGrpc.MsgServicesImplBase;
 
 import io.grpc.stub.StreamObserver;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ControlServices extends MsgServicesImplBase{
 	
@@ -75,9 +84,30 @@ public class ControlServices extends MsgServicesImplBase{
 		System.out.printf("voice recognition result: %s\n", voicestr);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
+                
+                //test
+                 File  data=new File("src\\main\\java\\application\\data.txt");
+                 
+                 FileWriter datar;
+            try {
+                datar = new FileWriter(data);
+                BufferedWriter bw = new BufferedWriter(datar);
+                bw.write(voicestr);
+                bw.close();
+                datar.close();
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ControlServices.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ControlServices.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                       
+                
+                
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
+                
 	}
 
 	@Override
