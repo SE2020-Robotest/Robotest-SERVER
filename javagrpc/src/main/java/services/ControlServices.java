@@ -1,11 +1,11 @@
 package services;
-
+import application.Main;
 import msg.grpc.RBPath;
 import msg.grpc.RBPosition;
 import msg.grpc.Response;
 import msg.grpc.VoiceStr;
 import msg.grpc.Point;
-
+import application.Environment;
 import msg.grpc.MsgServicesGrpc.MsgServicesImplBase;
 
 import io.grpc.stub.StreamObserver;
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 public class ControlServices extends MsgServicesImplBase{
 	
@@ -34,12 +35,28 @@ public class ControlServices extends MsgServicesImplBase{
 		double posx = point.getPosx();
 		double posy = point.getPosy();
 		double angle = request.getAngle();
+                
 		double vx = request.getVx();
 		double vy = request.getVy();
 		int timestamp = request.getTimestamp();
 		System.out.printf("posx:%.2f\n posy:%.2f\n angle:%.2f\n vx:%.2f\n vy:%.2f\n timestamp:%d\n",posx, posy, angle, vx, vy, timestamp);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
+                if(Environment.isstart==true)
+                {   Platform.runLater(()->{
+                    Environment.initial_position(posx,posy,angle);
+
+                            });
+                    
+                    
+                    Environment.isstart=false;
+                        }
+                else 
+                    Platform.runLater(()->{
+                    Environment.temp_position(posx,posy,angle);
+
+                            });
+                
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
@@ -103,7 +120,7 @@ public class ControlServices extends MsgServicesImplBase{
             }
                        
                 
-                
+                Main.b1.button.setText("ww");
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
