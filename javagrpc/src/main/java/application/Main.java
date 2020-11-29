@@ -4,7 +4,7 @@ import services.ControlClient;
 import msg.grpc.Block;
 import services.ControlServices;
 import application.Environment;
-
+import application.Test;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Thread;
@@ -40,13 +40,34 @@ import msg.grpc.Block;
 
 
 public class Main extends Application {
+        public static Button_type b1;
 	Group root = new Group();
 	Environment Env=new Environment(root);
 	@Override
 	public void start(Stage primaryStage) {
 //		try {
-		Button_type b1 = new Button_type(620, 500, "配置文档");
-		Button_type b2 = new Button_type(820, 500, "开始实验");
+                Runnable startexp=new Runnable(){
+                        public void run(){
+                            try {
+                                ControlServer.StartServer();
+                                //int i=0;
+                                /*while(true)
+                                {System.out.println(i);
+                                Thread.sleep(1000);
+                                i++;}*/
+                                
+                            } catch (IOException ex) {
+                                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                                
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    };
+                        new Thread(startexp).start();
+                        
+		 b1 = new Button_type(620, 500, "发送配置");
+		Button_type b2 = new Button_type(820, 500, "建立连接并开始实验");
 		Button_type b3 = new Button_type(620, 600, "结束实验");
 		Button_type b4 = new Button_type(820, 600, "日志保存");
 		Button_type b5 = new Button_type(1020, 500, "保存文档");
@@ -69,6 +90,10 @@ public class Main extends Application {
 				System.out.println(file.getAbsolutePath());
 				try {
 					Env.read(file);
+                                        if(Env.send(file)==0)
+                                            System.out.println("配置文件发送成功");
+                                        else
+                                            System.out.println("发送失败");
 					//Env.initial_position(2, 3, 45);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -78,11 +103,14 @@ public class Main extends Application {
 		});
  
                 b3.button.setOnAction(action->{
-                   /* ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.STOP);
+                   /*ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.STOP);
                     ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.STOP);*/
                        
                     System.exit(0);
                 });
+                /*b4.button.setOnAction(ac->{
+                    Test.change();
+                });*/
 		b5.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -158,75 +186,19 @@ public class Main extends Application {
                 b2.button.setOnAction(action->{//start experiment
                     
                     try {
-                        Runnable startexp=new Runnable(){
-                        public void run(){
-                            try {
-                                //ControlServer.StartServer();
-                                int i=0;
-                                while(true)
-                                {System.out.println(i);
-                                Thread.sleep(1000);
-                                i++;}
-                                
-                            } /*catch (IOException ex) {
-                                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                                
-                            }*/ catch (InterruptedException ex) {
-                                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    };
-                        new Thread(startexp).start();
                         
                         
-                        /*ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.CONNECT);
-                        ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.CONNECT);*/
-                        
-                        ArrayList<Block> blocks=new ArrayList<Block>();
-                        double roomwidth=0;
-                        double roomlength=0;
-                        //open file
-                        Stage stage1=new Stage();
-                        FileChooser fc = new FileChooser();
-                        fc.setTitle("选择配置文件");
-                        File file=fc.showOpenDialog(stage1);
-                        if (file==null) {
-                                return;
-                        }
-                        System.out.println(file.getAbsolutePath());
-                        try {
-                                FileReader fr = new FileReader(file);
-                        BufferedReader br = new BufferedReader(fr);
-                        String line = "";
-                        String[] arrs = null;
-                        if((line = br.readLine())!=null) {
-                        arrs = line.split(" ");
-                        roomwidth=Double.parseDouble(arrs[1]);
-                        roomlength=Double.parseDouble(arrs[3]);
-                        }
-                        while((line = br.readLine())!=null) {
-                            arrs = line.split(" ");
-                            double type = Double.parseDouble(arrs[0]);
-                            ControlClient.BlockType btype;
-                            if (type==1) {
-                                btype=ControlClient.BlockType.CUBE;}
-                            else {
-                                btype=ControlClient.BlockType.CYLINDER;}
-                            blocks.add(ControlClient.SetBlock(btype,
-                                    Double.parseDouble(arrs[1]),
-                                    Double.parseDouble(arrs[2]),
-                                    Double.parseDouble(arrs[3]),
-                                    Double.parseDouble(arrs[4])));
-                        }
-                        //send config
-                        //ControlClient.SendConfigMap(ControlClient.Receiver.AR,roomwidth,roomlength,blocks);
-                        //ControlClient.SendConfigMap(ControlClient.Receiver.ROBOT,roomwidth,roomlength,blocks);   
-                        /*ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
-                        ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.START);*/
-                        }catch (IOException e) {
-                                
-                                e.printStackTrace();
-                        }
+                        int tag=0;
+                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.CONNECT);
+                        ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.CONNECT);
+                        System.out.println("test");
+                         
+                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
+                        ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.START);
+                        if(tag==0)
+                            System.out.println("连接并开始成功");
+                        else
+                            System.out.println("连接并开始失败");
                 }   
                         catch(Throwable t){
                         t.printStackTrace();
@@ -235,7 +207,7 @@ public class Main extends Application {
                     
                     
                     
-                    Runnable tmer =new Runnable(){
+                    /*Runnable tmer =new Runnable(){
                         
                         public void run(){
                         File  data=new File("src\\main\\java\\application\\data.txt");
@@ -264,7 +236,7 @@ public class Main extends Application {
                     
                         }}
                     };Thread newte=new Thread(tmer);
-                    newte.start();
+                    newte.start();*/
                 });
 //		} catch(Exception e) {
 //			e.printStackTrace();

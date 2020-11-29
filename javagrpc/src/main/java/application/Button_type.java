@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 
 public class Button_type extends Button {
-Button button;
+public Button button;
 
 public Button_type(int x, int y, String arg0) {
 button=new Button();

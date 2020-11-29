@@ -4,13 +4,17 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -24,6 +28,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import msg.grpc.Block;
+import services.ControlClient;
 
 
 public class Environment {
@@ -198,6 +205,47 @@ public void read(File fd) throws IOException{
 	}
 };
 //发送配置文件
-public void send() {};
-
+public int send(File file) {
+        int tag=0;
+        ArrayList<Block> blocks = new ArrayList<Block>();
+        double roomwidth = 0;
+        double roomlength = 0;
+        //open file
+        System.out.println(file.getAbsolutePath());
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line = "";
+            String[] arrs = null;
+            if ((line = br.readLine()) != null) {
+                arrs = line.split(" ");
+                roomwidth = Double.parseDouble(arrs[1]);
+                roomlength = Double.parseDouble(arrs[3]);
+            }
+            while ((line = br.readLine()) != null) {
+                arrs = line.split(" ");
+                double type = Double.parseDouble(arrs[0]);
+                ControlClient.BlockType btype;
+                if (type == 1) {
+                    btype = ControlClient.BlockType.CUBE;
+                } else {
+                    btype = ControlClient.BlockType.CYLINDER;
+                }
+                blocks.add(ControlClient.SetBlock(btype,
+                        Double.parseDouble(arrs[1]),
+                        Double.parseDouble(arrs[2]),
+                        Double.parseDouble(arrs[3]),
+                        Double.parseDouble(arrs[4])));
+            }
+            //send config
+            tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
+            tag+=ControlClient.SendConfigMap(ControlClient.Receiver.ROBOT, roomwidth, roomlength, blocks);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ;
+        return tag;
+    }
 }
