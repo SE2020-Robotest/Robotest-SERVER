@@ -34,19 +34,20 @@ import services.ControlClient;
 
 
 public class Environment {
-Group Env;
-double data[][]=null;
-double X;				//width of the ground
-double Y;				//height of the ground
-double Coeff_x;		//the coeff of x
-double Coeff_y;
-double delta_x;
-double delta_y;
-double px_temp;
-double py_temp;
-int posi_cir;
-int posi_arc;
+static Group Env;
+static double data[][]=null;
+static double X;				//width of the ground
+static double Y;				//height of the ground
+static double Coeff_x;		//the coeff of x
+static double Coeff_y;
+static double delta_x;
+static double delta_y;
+static double px_temp;
+static double py_temp;
+static int posi_cir;
+static int posi_arc;
 static int H=450;
+public static boolean isstart=true;
 BufferedWriter bw;
 File temp; 
 //max width : 600
@@ -95,7 +96,7 @@ public void Environment_initial(double x,double y)throws IOException {
 public void rec(double x,double y,double px,double py,Color c) throws IOException{
 	javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle();
 	rec.setX((px-x/2)*Coeff_x+delta_x);
-	rec.setY(Y-(py-y/2)*Coeff_y+delta_y);
+	rec.setY(Y-(py+y/2)*Coeff_y+delta_y);
 	rec.setArcWidth(5);
 	rec.setArcHeight(5);
 	rec.setWidth(Math.floor(x*Coeff_x));
@@ -105,7 +106,8 @@ public void rec(double x,double y,double px,double py,Color c) throws IOExceptio
 	bw.write("1 "+x+" "+y+" "+px+" "+py+"\n");
 };
 //初始位置
-public void initial_position(double x,double y,double angle) {
+public static void initial_position(double x,double y,double angle) {
+        angle=angle*180/3.1415;
 	Circle cir = new Circle();
 	px_temp=x*Coeff_x+delta_x;
 	py_temp=Y-y*Coeff_y+delta_y;
@@ -136,7 +138,8 @@ public void initial_position(double x,double y,double angle) {
 	
 }
 //实际轨迹
-public void temp_position(double x,double y,double angle) {
+public static void temp_position(double x,double y,double angle) {
+        angle*=180/3.1415;
 	Line  l=new Line();
 	l.setStartX(px_temp);
 	l.setStartY(py_temp);
@@ -203,6 +206,8 @@ public void read(File fd) throws IOException{
 		}
 		
 	}
+        
+        br.close();fr.close();
 };
 //发送配置文件
 public int send(File file) {
@@ -238,12 +243,14 @@ public int send(File file) {
                         Double.parseDouble(arrs[4])));
             }
             //send config
-            tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
+            //tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
             tag+=ControlClient.SendConfigMap(ControlClient.Receiver.ROBOT, roomwidth, roomlength, blocks);
+            br.close();fr.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("fucku");
         }
         ;
         return tag;

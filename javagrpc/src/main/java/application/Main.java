@@ -37,9 +37,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import msg.grpc.Block;
 
-
+class pointi{
+    double posx,posy,angel,vx,vy,timestamp;
+    public pointi(double a1,double a2,double a3, double a4,int a5){}
+}
 
 public class Main extends Application {
+    public static void charge(){
+     
+    }
+        public static int a;
         public static Button_type b1;
 	Group root = new Group();
 	Environment Env=new Environment(root);
@@ -89,28 +96,30 @@ public class Main extends Application {
 				}
 				System.out.println(file.getAbsolutePath());
 				try {
-					Env.read(file);
-                                        if(Env.send(file)==0)
+					Env.read(file);Env.send(file);
+                                       
+                                        if(0==0)
                                             System.out.println("配置文件发送成功");
                                         else
                                             System.out.println("发送失败");
 					//Env.initial_position(2, 3, 45);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+                                        System.out.println("aaaaaaahhhh");
 					e.printStackTrace();
 				}
 			}
 		});
  
                 b3.button.setOnAction(action->{
-                   /*ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.STOP);
-                    ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.STOP);*/
+                   //ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.STOP);
+                   ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.STOP);
                        
                     System.exit(0);
                 });
-                /*b4.button.setOnAction(ac->{
+                b4.button.setOnAction(ac->{
                     Test.change();
-                });*/
+                });
 		b5.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -190,11 +199,9 @@ public class Main extends Application {
                         
                         int tag=0;
                         //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.CONNECT);
-                        ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.CONNECT);
-                        System.out.println("test");
-                         
-                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
-                        ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.START);
+                        tag+=ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.CONNECT);
+                       // tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
+                        tag+=ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.START);
                         if(tag==0)
                             System.out.println("连接并开始成功");
                         else
@@ -241,6 +248,8 @@ public class Main extends Application {
 //		} catch(Exception e) {
 //			e.printStackTrace();
 //		}
+
+        
 	}
 	public void end() throws IOException {
 		Env.temp.delete();
