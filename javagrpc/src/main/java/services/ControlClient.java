@@ -4,6 +4,7 @@ import msg.grpc.Response;
 import msg.grpc.Block;
 import msg.grpc.Point;
 import msg.grpc.ControlCmd;
+import msg.grpc.Drive;
 import msg.grpc.MsgServicesGrpc.MsgServicesBlockingStub;
 import msg.grpc.MsgServicesGrpc;
 
