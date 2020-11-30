@@ -103,9 +103,13 @@ private static final long serialVersionUID = 0L;
      */
     RIGHT(3),
     /**
-     * <code>ROTATE = 4;</code>
+     * <code>CLOCKWISE = 4;</code>
      */
-    ROTATE(4),
+    CLOCKWISE(4),
+    /**
+     * <code>ANTICLOCKWISE = 5;</code>
+     */
+    ANTICLOCKWISE(5),
     UNRECOGNIZED(-1),
     ;
 
@@ -126,9 +130,13 @@ private static final long serialVersionUID = 0L;
      */
     public static final int RIGHT_VALUE = 3;
     /**
-     * <code>ROTATE = 4;</code>
+     * <code>CLOCKWISE = 4;</code>
      */
-    public static final int ROTATE_VALUE = 4;
+    public static final int CLOCKWISE_VALUE = 4;
+    /**
+     * <code>ANTICLOCKWISE = 5;</code>
+     */
+    public static final int ANTICLOCKWISE_VALUE = 5;
 
 
     public final int getNumber() {
@@ -153,7 +161,8 @@ private static final long serialVersionUID = 0L;
         case 1: return BACK;
         case 2: return LEFT;
         case 3: return RIGHT;
-        case 4: return ROTATE;
+        case 4: return CLOCKWISE;
+        case 5: return ANTICLOCKWISE;
         default: return null;
       }
     }

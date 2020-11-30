@@ -87,21 +87,23 @@ public final class Msg {
       "\022\n\nroomheight\030\002 \001(\001\022\032\n\006blocks\030\003 \003(\0132\n.ms" +
       "g.Block\"_\n\nControlCmd\022$\n\003cmd\030\001 \001(\0162\027.msg" +
       ".ControlCmd.CtrlCmd\"+\n\007CtrlCmd\022\t\n\005START\020" +
-      "\000\022\010\n\004STOP\020\001\022\013\n\007CONNECT\020\002\"p\n\005Drive\022%\n\010dri" +
-      "vecmd\030\001 \001(\0162\023.msg.Drive.DriveCmd\"@\n\010Driv" +
-      "eCmd\022\t\n\005FRONT\020\000\022\010\n\004BACK\020\001\022\010\n\004LEFT\020\002\022\t\n\005R" +
-      "IGHT\020\003\022\n\n\006ROTATE\020\004\"[\n\010Response\022$\n\006status" +
-      "\030\001 \001(\0162\024.msg.Response.Status\")\n\006Status\022\006" +
-      "\n\002OK\020\000\022\t\n\005ERROR\020\001\022\014\n\010FINISHED\020\0022\315\002\n\013MsgS" +
-      "ervices\022$\n\tConfigMap\022\010.msg.Map\032\r.msg.Res" +
-      "ponse\022/\n\rRobotPosition\022\017.msg.RBPosition\032" +
-      "\r.msg.Response\022\'\n\tRobotPath\022\013.msg.RBPath" +
-      "\032\r.msg.Response\0220\n\rSendVoiceFile\022\016.msg.V" +
-      "oiceData\032\r.msg.Response(\001\022+\n\013VoiceResult" +
-      "\022\r.msg.VoiceStr\032\r.msg.Response\0220\n\016Contro" +
-      "lCommand\022\017.msg.ControlCmd\032\r.msg.Response" +
-      "\022-\n\rRobotFinished\022\r.msg.Response\032\r.msg.R" +
-      "esponseB\014\n\010msg.grpcP\001b\006proto3"
+      "\000\022\010\n\004STOP\020\001\022\013\n\007CONNECT\020\002\"\206\001\n\005Drive\022%\n\010dr" +
+      "ivecmd\030\001 \001(\0162\023.msg.Drive.DriveCmd\"V\n\010Dri" +
+      "veCmd\022\t\n\005FRONT\020\000\022\010\n\004BACK\020\001\022\010\n\004LEFT\020\002\022\t\n\005" +
+      "RIGHT\020\003\022\r\n\tCLOCKWISE\020\004\022\021\n\rANTICLOCKWISE\020" +
+      "\005\"[\n\010Response\022$\n\006status\030\001 \001(\0162\024.msg.Resp" +
+      "onse.Status\")\n\006Status\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001" +
+      "\022\014\n\010FINISHED\020\0022\366\002\n\013MsgServices\022$\n\tConfig" +
+      "Map\022\010.msg.Map\032\r.msg.Response\022/\n\rRobotPos" +
+      "ition\022\017.msg.RBPosition\032\r.msg.Response\022\'\n" +
+      "\tRobotPath\022\013.msg.RBPath\032\r.msg.Response\0220" +
+      "\n\rSendVoiceFile\022\016.msg.VoiceData\032\r.msg.Re" +
+      "sponse(\001\022+\n\013VoiceResult\022\r.msg.VoiceStr\032\r" +
+      ".msg.Response\0220\n\016ControlCommand\022\017.msg.Co" +
+      "ntrolCmd\032\r.msg.Response\022-\n\rRobotFinished" +
+      "\022\r.msg.Response\032\r.msg.Response\022\'\n\nDriveR" +
+      "obot\022\n.msg.Drive\032\r.msg.ResponseB\014\n\010msg.g" +
+      "rpcP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

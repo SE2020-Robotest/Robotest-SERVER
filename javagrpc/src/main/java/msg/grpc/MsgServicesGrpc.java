@@ -244,6 +244,37 @@ public final class MsgServicesGrpc {
     return getRobotFinishedMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<msg.grpc.Drive,
+      msg.grpc.Response> getDriveRobotMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DriveRobot",
+      requestType = msg.grpc.Drive.class,
+      responseType = msg.grpc.Response.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<msg.grpc.Drive,
+      msg.grpc.Response> getDriveRobotMethod() {
+    io.grpc.MethodDescriptor<msg.grpc.Drive, msg.grpc.Response> getDriveRobotMethod;
+    if ((getDriveRobotMethod = MsgServicesGrpc.getDriveRobotMethod) == null) {
+      synchronized (MsgServicesGrpc.class) {
+        if ((getDriveRobotMethod = MsgServicesGrpc.getDriveRobotMethod) == null) {
+          MsgServicesGrpc.getDriveRobotMethod = getDriveRobotMethod =
+              io.grpc.MethodDescriptor.<msg.grpc.Drive, msg.grpc.Response>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DriveRobot"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  msg.grpc.Drive.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  msg.grpc.Response.getDefaultInstance()))
+              .setSchemaDescriptor(new MsgServicesMethodDescriptorSupplier("DriveRobot"))
+              .build();
+        }
+      }
+    }
+    return getDriveRobotMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -341,6 +372,13 @@ public final class MsgServicesGrpc {
       asyncUnimplementedUnaryCall(getRobotFinishedMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void driveRobot(msg.grpc.Drive request,
+        io.grpc.stub.StreamObserver<msg.grpc.Response> responseObserver) {
+      asyncUnimplementedUnaryCall(getDriveRobotMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -392,6 +430,13 @@ public final class MsgServicesGrpc {
                 msg.grpc.Response,
                 msg.grpc.Response>(
                   this, METHODID_ROBOT_FINISHED)))
+          .addMethod(
+            getDriveRobotMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                msg.grpc.Drive,
+                msg.grpc.Response>(
+                  this, METHODID_DRIVE_ROBOT)))
           .build();
     }
   }
@@ -465,6 +510,14 @@ public final class MsgServicesGrpc {
       asyncUnaryCall(
           getChannel().newCall(getRobotFinishedMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void driveRobot(msg.grpc.Drive request,
+        io.grpc.stub.StreamObserver<msg.grpc.Response> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getDriveRobotMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -521,6 +574,13 @@ public final class MsgServicesGrpc {
     public msg.grpc.Response robotFinished(msg.grpc.Response request) {
       return blockingUnaryCall(
           getChannel(), getRobotFinishedMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public msg.grpc.Response driveRobot(msg.grpc.Drive request) {
+      return blockingUnaryCall(
+          getChannel(), getDriveRobotMethod(), getCallOptions(), request);
     }
   }
 
@@ -585,6 +645,14 @@ public final class MsgServicesGrpc {
       return futureUnaryCall(
           getChannel().newCall(getRobotFinishedMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<msg.grpc.Response> driveRobot(
+        msg.grpc.Drive request) {
+      return futureUnaryCall(
+          getChannel().newCall(getDriveRobotMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CONFIG_MAP = 0;
@@ -593,7 +661,8 @@ public final class MsgServicesGrpc {
   private static final int METHODID_VOICE_RESULT = 3;
   private static final int METHODID_CONTROL_COMMAND = 4;
   private static final int METHODID_ROBOT_FINISHED = 5;
-  private static final int METHODID_SEND_VOICE_FILE = 6;
+  private static final int METHODID_DRIVE_ROBOT = 6;
+  private static final int METHODID_SEND_VOICE_FILE = 7;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -634,6 +703,10 @@ public final class MsgServicesGrpc {
           break;
         case METHODID_ROBOT_FINISHED:
           serviceImpl.robotFinished((msg.grpc.Response) request,
+              (io.grpc.stub.StreamObserver<msg.grpc.Response>) responseObserver);
+          break;
+        case METHODID_DRIVE_ROBOT:
+          serviceImpl.driveRobot((msg.grpc.Drive) request,
               (io.grpc.stub.StreamObserver<msg.grpc.Response>) responseObserver);
           break;
         default:
@@ -707,6 +780,7 @@ public final class MsgServicesGrpc {
               .addMethod(getVoiceResultMethod())
               .addMethod(getControlCommandMethod())
               .addMethod(getRobotFinishedMethod())
+              .addMethod(getDriveRobotMethod())
               .build();
         }
       }

@@ -101,4 +101,40 @@ public class ControlClient {
 		Response response = stub.controlCommand(request);
 		return response.getStatusValue();
 	}
+	
+	public static enum DriveCommand{
+		FRONT, BACK, LEFT, RIGHT, CLOCKWISE, ANTICLOCKWISE
+	}
+	
+	public static int SendDriveCommand(Receiver receiver, DriveCommand cmd) {
+		/*
+		 * this function sends the drive robot command to receiver site.
+		 * cmd is th command that will be send.
+		 * this function return the response value: 0-ok, 1-error
+		 * */
+		String ip = IPs.get(receiver);
+		int port = Ports.get(receiver);
+		
+		Drive.DriveCmd command = Drive.DriveCmd.FRONT;
+		if(cmd == DriveCommand.BACK) {
+			command = Drive.DriveCmd.BACK;
+		}
+		else if(cmd == DriveCommand.LEFT){
+			command = Drive.DriveCmd.LEFT;
+		}
+		else if(cmd == DriveCommand.RIGHT) {
+			command = Drive.DriveCmd.RIGHT;
+		}
+		else if(cmd == DriveCommand.CLOCKWISE) {
+			command = Drive.DriveCmd.CLOCKWISE;
+		}
+		else if(cmd == DriveCommand.ANTICLOCKWISE) {
+			command = Drive.DriveCmd.ANTICLOCKWISE;
+		}
+		Drive request = Drive.newBuilder().setDrivecmd(command).build();
+		ManagedChannel channel = ManagedChannelBuilder.forAddress(ip,port).usePlaintext().build();
+		MsgServicesBlockingStub stub = MsgServicesGrpc.newBlockingStub(channel);
+		Response response = stub.driveRobot(request);
+		return response.getStatusValue();
+	}
 }
