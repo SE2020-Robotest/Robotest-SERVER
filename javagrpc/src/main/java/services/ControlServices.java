@@ -16,13 +16,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 
 public class ControlServices extends MsgServicesImplBase{
-	
+	private static boolean isstart=true;
 	@Override
 	public void robotPosition(RBPosition request, StreamObserver<Response> responseObserver) {
 		/*
@@ -39,23 +40,16 @@ public class ControlServices extends MsgServicesImplBase{
 		double vx = request.getVx();
 		double vy = request.getVy();
 		int timestamp = request.getTimestamp();
-		System.out.printf("posx:%.2f\n posy:%.2f\n angle:%.2f\n vx:%.2f\n vy:%.2f\n timestamp:%d\n",posx, posy, angle, vx, vy, timestamp);
+		//System.out.printf("posx:%.2f\n posy:%.2f\n angle:%.2f\n vx:%.2f\n vy:%.2f\n timestamp:%d\n",posx, posy, angle, vx, vy, timestamp);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
-                if(Environment.isstart==true)
-                {   Platform.runLater(()->{
-                    Environment.initial_position(posx,posy,angle);
-
-                            });
-                    
-                    
-                    Environment.isstart=false;
-                        }
+                Main.setofp.add(new Main.pointi(posx,posy,angle,vx,vy,timestamp));
+                if(isstart==true)
+                {   Platform.runLater(()->{Environment.initial_position(posx,posy,angle);});
+                    isstart=false;
+                }
                 else 
-                    Platform.runLater(()->{
-                    Environment.temp_position(posx,posy,angle);
-
-                            });
+                    Platform.runLater(()->{Environment.temp_position(posx,posy,angle);});
                 
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
@@ -70,13 +64,16 @@ public class ControlServices extends MsgServicesImplBase{
 		 * TODO: please implement the functionality of posting RBPath message to your program.
 		 * */
 		// the following code shows how to operate the data structure RBPath
+                ArrayList<Main.pot> apath=new ArrayList<Main.pot>();
 		int starttime = request.getStarttime();
 		int endtime = request.getEndtime();
 		System.out.printf("start time: %d, end time: %d", starttime, endtime);
 		List<Point> points = request.getPosList();
 		for(Point point:points) {
 			System.out.printf("position x: %.2f, position y: %.2f\n", point.getPosx(), point.getPosy());
+                        apath.add(new Main.pot(point.getPosx(), point.getPosy()));
 		}
+                Main.setofpath.add(apath);
 		int len = request.getPosCount();
 		for(int i = 0;i<len;i++) {
 			Point point = request.getPos(i);
@@ -120,7 +117,7 @@ public class ControlServices extends MsgServicesImplBase{
             }
                        
                 
-                Main.b1.button.setText("ww");
+
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
