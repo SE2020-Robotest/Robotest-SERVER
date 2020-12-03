@@ -8,7 +8,7 @@ import io.grpc.ServerBuilder;
 import services.ControlServices;
 
 public class ControlServer {
-	static int Port = 8888;
+	static int Port = 8889;
 	public static void StartServer()throws IOException, InterruptedException {
 	    /*
 	     * this function starts the control message listen server.

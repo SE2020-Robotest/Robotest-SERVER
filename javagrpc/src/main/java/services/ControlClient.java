@@ -1,10 +1,10 @@
 package services;
 
+import msg.grpc.Drive;
 import msg.grpc.Response;
 import msg.grpc.Block;
 import msg.grpc.Point;
 import msg.grpc.ControlCmd;
-import msg.grpc.Drive;
 import msg.grpc.MsgServicesGrpc.MsgServicesBlockingStub;
 import msg.grpc.MsgServicesGrpc;
 
@@ -25,11 +25,11 @@ public class ControlClient {
 	static {
 		IPs = new HashMap<Receiver, String>();
 			IPs.put(Receiver.AR, "localhost");
-			IPs.put(Receiver.CONTROL, "localhost");
-			IPs.put(Receiver.ROBOT, "localhost");
+			IPs.put(Receiver.CONTROL, "183.172.220.1");
+                        IPs.put(Receiver.ROBOT, "59.66.190.24");
 		Ports = new HashMap<Receiver, Integer>();
 			Ports.put(Receiver.AR, 8888);
-			Ports.put(Receiver.CONTROL, 8888);
+			Ports.put(Receiver.CONTROL, 8889);
 			Ports.put(Receiver.ROBOT, 8888);
 	}
 	
@@ -99,11 +99,13 @@ public class ControlClient {
 		ControlCmd request = ControlCmd.newBuilder().setCmd(command).build();
 		ManagedChannel channel = ManagedChannelBuilder.forAddress(ip,port).usePlaintext().build();
 		MsgServicesBlockingStub stub = MsgServicesGrpc.newBlockingStub(channel);
+                
 		Response response = stub.controlCommand(request);
+                
 		return response.getStatusValue();
 	}
-	
-	public static enum DriveCommand{
+        
+        public static enum DriveCommand{
 		FRONT, BACK, LEFT, RIGHT, CLOCKWISE, ANTICLOCKWISE
 	}
 	

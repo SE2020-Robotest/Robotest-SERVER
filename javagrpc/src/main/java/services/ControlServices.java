@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 
 public class ControlServices extends MsgServicesImplBase{
+        Environment Env=Main.Env;
 	private static boolean isstart=true;
 	@Override
 	public void robotPosition(RBPosition request, StreamObserver<Response> responseObserver) {
@@ -44,12 +45,13 @@ public class ControlServices extends MsgServicesImplBase{
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
                 Main.setofp.add(new Main.pointi(posx,posy,angle,vx,vy,timestamp));
+                Main.Cha.add_data(timestamp, posx, posy, vx, vy, angle);
                 if(isstart==true)
-                {   Platform.runLater(()->{Environment.initial_position(posx,posy,angle);});
+                {   Platform.runLater(()->{Env.initial_position(posx,posy,angle);});
                     isstart=false;
                 }
                 else 
-                    Platform.runLater(()->{Environment.temp_position(posx,posy,angle);});
+                    Platform.runLater(()->{Env.temp_position(posx,posy,angle);});
                 
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
@@ -69,7 +71,14 @@ public class ControlServices extends MsgServicesImplBase{
 		int endtime = request.getEndtime();
 		System.out.printf("start time: %d, end time: %d", starttime, endtime);
 		List<Point> points = request.getPosList();
+                boolean isstart2=true;
 		for(Point point:points) {
+                        if(isstart2){
+                            Platform.runLater(()->{Env.cal_initial_position(point.getPosx(), point.getPosy());});
+                            isstart2=false;
+                        }
+                        else
+                            Platform.runLater(()->{Env.cal_temp_position(point.getPosx(), point.getPosy());});
 			System.out.printf("position x: %.2f, position y: %.2f\n", point.getPosx(), point.getPosy());
                         apath.add(new Main.pot(point.getPosx(), point.getPosy()));
 		}
@@ -95,29 +104,10 @@ public class ControlServices extends MsgServicesImplBase{
 		 * */
 		// the following code shows how to operate the parameter VoiceStr
 		String voicestr = request.getVoice();
+                Main.voiceresult.add(voicestr);
 		System.out.printf("voice recognition result: %s\n", voicestr);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
-                
-                //test
-                 File  data=new File("src\\main\\java\\application\\data.txt");
-                 
-                 FileWriter datar;
-            try {
-                datar = new FileWriter(data);
-                BufferedWriter bw = new BufferedWriter(datar);
-                bw.write(voicestr);
-                bw.close();
-                datar.close();
-                
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(ControlServices.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ControlServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                       
-                
-
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
@@ -132,6 +122,12 @@ public class ControlServices extends MsgServicesImplBase{
 		 * TODO: please implement the functionality of posting robot finished message to your program.
 		 * */
 		int status = request.getStatusValue();
+                if(status==2)
+                    System.out.printf("robotstatus: FINISHED" );
+                else if(status==1)
+                    System.out.printf("robotstatus: ERROR");
+                else
+                    System.out.printf("sth out bounder");
 		System.out.printf("status: %d", status);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
