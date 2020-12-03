@@ -18,6 +18,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
@@ -39,27 +40,31 @@ double px_temp;
 double py_temp;
 int posi_cir;
 int posi_arc;
+double cal_px_temp;
+double cal_py_temp;
+Boolean flag_cal;
+static int H=450;
 BufferedWriter bw;
 File temp; 
-//max width : 600
-//max height: 550
+//max width : 550
+//max height: 450
 public Environment(Group root) {
 	Env=root;
 }
 
 public void Environment_initial(double x,double y)throws IOException {
 	if (x>=y) {
-		X=550;
-		Y=550*y/x;
+		X=H;
+		Y=H*y/x;
 	}
 	else {
-		X=550*x/y;
-		Y=550;
+		X=H*x/y;
+		Y=H;
 	}
 	Coeff_x=X/x;
 	Coeff_y=Y/y;
 	delta_x=(550-X)/2+30;
-	delta_y=(550-Y)/2+30;
+	delta_y=(H-Y)/2+30;
 	
 	javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle();
 	rec.setX(delta_x);
@@ -87,7 +92,7 @@ public void Environment_initial(double x,double y)throws IOException {
 public void rec(double x,double y,double px,double py,Color c) throws IOException{
 	javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle();
 	rec.setX((px-x/2)*Coeff_x+delta_x);
-	rec.setY((py-y/2)*Coeff_y+delta_y);
+	rec.setY(Y-(py+y/2)*Coeff_y+delta_y);
 	rec.setArcWidth(5);
 	rec.setArcHeight(5);
 	rec.setWidth(Math.floor(x*Coeff_x));
@@ -100,7 +105,7 @@ public void rec(double x,double y,double px,double py,Color c) throws IOExceptio
 public void initial_position(double x,double y,double angle) {
 	Circle cir = new Circle();
 	px_temp=x*Coeff_x+delta_x;
-	py_temp=y*Coeff_y+delta_y;
+	py_temp=Y-y*Coeff_y+delta_y;
 	cir.setCenterX(px_temp);
 	cir.setCenterY(py_temp);
 	cir.setRadius(4);
@@ -133,7 +138,7 @@ public void temp_position(double x,double y,double angle) {
 	l.setStartX(px_temp);
 	l.setStartY(py_temp);
 	px_temp=x*Coeff_x+delta_x;
-	py_temp=y*Coeff_y+delta_y;
+	py_temp=Y-y*Coeff_y+delta_y;
 	l.setEndX(px_temp);
 	l.setEndY(py_temp);
 	Env.getChildren().add(l);
@@ -178,6 +183,7 @@ public void save(File fd)throws Exception {
     }
 	
 };
+//读取配置文档
 public void read(File fd) throws IOException{
 	FileReader fr = new FileReader(fd);
 	BufferedReader br = new BufferedReader(fr);
@@ -198,5 +204,22 @@ public void read(File fd) throws IOException{
 };
 //发送配置文件
 public void send() {};
-
+//路径规划初始化
+public void cal_initial_position(double x,double y) {
+	cal_px_temp=x*Coeff_x+delta_x;
+	cal_py_temp=Y-y*Coeff_y+delta_y;
+};
+//路径规划显示
+public void cal_temp_position(double x,double y) {
+	Line  l=new Line();
+	l.setStartX(cal_px_temp);
+	l.setStartY(cal_py_temp);
+	cal_px_temp=x*Coeff_x+delta_x;
+	cal_py_temp=Y-y*Coeff_y+delta_y;
+	l.setEndX(cal_px_temp);
+	l.setEndY(cal_py_temp);
+	l.setStroke(Paint.valueOf("#0000FF"));
+	Env.getChildren().add(l);
 }
+
+};
