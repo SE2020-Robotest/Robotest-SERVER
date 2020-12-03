@@ -10,9 +10,10 @@ import application.Main;
  * @author 文大贝
  */
 public class Test {
-    public static void change(){
-        Main.b1.button.setText("hhhhh");
-         Environment.initial_position(30, 40, 1.2);
-                                        Environment.temp_position(50,60,0.1);
+        Environment Env=Main.Env;
+    public void change(){
+        
+         Env.initial_position(30, 40, 1.2);
+         Env.temp_position(50,60,0.1);
     }
 }

@@ -1,4 +1,5 @@
 package application;
+import javafx.scene.control.TextArea;
 import java.io.Serializable;
 import services.ControlServer;
 import services.ControlClient;
@@ -22,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -31,8 +33,10 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -46,6 +50,7 @@ import msg.grpc.Block;
 
 public class Main extends Application {
     static int co=0;
+    static int chartcate=1;
         void testit(){
             setofp.add(new pointi(21,0,0,0,0,0));
             setofp.add(new pointi(22,0,0,0,0,0));
@@ -71,9 +76,10 @@ public class Main extends Application {
     }
         public static ArrayList<pointi> setofp=new ArrayList<pointi>();//array that save imformation of points
         public static ArrayList<ArrayList<pot>> setofpath=new ArrayList<ArrayList<pot>>();
-    
-	Group root = new Group();
-	Environment Env=new Environment(root);
+        public static ArrayList<String> voiceresult=new ArrayList<String>();
+	public static Group root = new Group();
+	public static Environment Env=new Environment(root);
+        public static Chart Cha=new Chart(root);
 	@Override
 	public void start(Stage primaryStage) {
                 primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -94,15 +100,56 @@ public class Main extends Application {
                         }
                     };
                 new Thread(startexp).start();
-                        
+                
+                final ToggleGroup tgroup = new ToggleGroup();
+                
+                RadioButton rb0 = new RadioButton("show pos-t");
+                RadioButton rb1 = new RadioButton("show v-t");
+                RadioButton rb2 = new RadioButton("show θ-t");
+                rb0.setToggleGroup(tgroup);
+                rb1.setToggleGroup(tgroup);  
+                rb2.setToggleGroup(tgroup);
+                rb1.setSelected(true) ;
+                rb0.setLayoutX(650);
+                rb0.setLayoutY(10);
+                rb1.setLayoutX(760);
+                rb1.setLayoutY(10);
+                rb2.setLayoutX(870);
+                rb2.setLayoutY(10);
+                root.getChildren().add(rb0);
+                root.getChildren().add(rb1);
+                root.getChildren().add(rb2);
+                rb0.setOnAction(action->{chartcate=0;Cha.print_chart(chartcate);});
+                rb1.setOnAction(action->{chartcate=1;Cha.print_chart(chartcate);});
+                rb2.setOnAction(action->{chartcate=2;Cha.print_chart(chartcate);});
+                Button cleardata=new Button("清除数据") ;
+                cleardata.setLayoutX(1050);
+                cleardata.setLayoutY(5);
+                cleardata.setPrefSize(100, 30);
+                root.getChildren().add(cleardata);
+                cleardata.setOnAction(action->{Cha.print_chart(3);});
+                
+                new Thread(new Runnable(){
+                    public void run(){
+                        while(true){
+                            Platform.runLater(()->{Cha.print_chart(chartcate);});
+                            try {
+                                Thread.sleep(1000);
+                                } catch (InterruptedException ex) {
+                                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                        }
+                    }
+                }).start();
+                
 		Button_type b1 = new Button_type(620, 500, "发送配置");
 		Button_type b2 = new Button_type(820, 500, "开始实验");
 		Button_type b3 = new Button_type(620, 600, "结束实验");
 		Button_type b4 = new Button_type(820, 600, "数据保存");
 		Button_type b5 = new Button_type(1020, 500, "保存配置");
 		Button_type b6 = new Button_type(1020, 600, "退出");
-                Button_type b7 = new Button_type(1220, 500, "数据读取");
-                
+                Button_type b7 = new Button_type(620, 700, "数据读取");
+                 
 		b1.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -165,6 +212,7 @@ public class Main extends Application {
                                    ObjectOutputStream out = new ObjectOutputStream(fileOut);
                                    out.writeObject(setofp);
                                    out.writeObject(setofpath);
+                                   out.writeObject(voiceresult);
                                    out.close();
                                    fileOut.close();
                                    System.out.printf("数据已保存");
@@ -248,14 +296,24 @@ public class Main extends Application {
 		text.setPrefHeight(270);
 		text.setWrapText(true);
 		root.getChildren().add(text);
-//		test.setOnKeyPressed(new EventHandler<KeyEvent>(){
-//
-//			@Override
-//			public void handle(KeyEvent event) {
-//				text.appendText(event.getCode().getName());	
-//				// TODO Auto-generated method stub		
-//			}		
-//		});
+		/*root.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			@Override
+			public void handle(KeyEvent event) {
+				System.out.println(event.getCode());		
+			}		
+		});*/
+                root.addEventFilter(KeyEvent.KEY_PRESSED, event->{
+                    ControlClient.DriveCommand cmd;
+                    switch(event.getCode()){
+                        case UP:cmd=ControlClient.DriveCommand.FRONT;break;
+                        case DOWN:cmd=ControlClient.DriveCommand.BACK;break;
+                        case LEFT:cmd=ControlClient.DriveCommand.LEFT;break;
+                        case RIGHT:cmd=ControlClient.DriveCommand.RIGHT;break;
+                        default:return;
+                    }
+                    ControlClient.SendDriveCommand(ControlClient.Receiver.ROBOT,cmd);
+                    event.consume();
+                });
 		Scene scene = new Scene(root,1200,800);
 		System.out.println(root);
 		//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
