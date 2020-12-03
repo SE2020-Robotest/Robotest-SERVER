@@ -4,13 +4,17 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -18,12 +22,15 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import msg.grpc.Block;
+import services.ControlClient;
 
 
 public class Environment {
@@ -39,11 +46,14 @@ double px_temp;
 double py_temp;
 int posi_cir;
 int posi_arc;
+double cal_px_temp;
+double cal_py_temp;
+Boolean flag_cal;
 static int H=450;
 BufferedWriter bw;
 File temp; 
-//max width : 600
-//max height: 550
+//max width : 550
+//max height: 450
 public Environment(Group root) {
 	Env=root;
 }
@@ -84,11 +94,11 @@ public void Environment_initial(double x,double y)throws IOException {
 	}
 
 };
-//构造长方形
+//构�?�长方形
 public void rec(double x,double y,double px,double py,Color c) throws IOException{
 	javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle();
 	rec.setX((px-x/2)*Coeff_x+delta_x);
-	rec.setY(Y-(py-y/2)*Coeff_y+delta_y);
+	rec.setY(Y-(py+y/2)*Coeff_y+delta_y);
 	rec.setArcWidth(5);
 	rec.setArcHeight(5);
 	rec.setWidth(Math.floor(x*Coeff_x));
@@ -179,6 +189,7 @@ public void save(File fd)throws Exception {
     }
 	
 };
+//读取配置文档
 public void read(File fd) throws IOException{
 	FileReader fr = new FileReader(fd);
 	BufferedReader br = new BufferedReader(fr);
@@ -197,7 +208,69 @@ public void read(File fd) throws IOException{
 		
 	}
 };
-//发送配置文件
-public void send() {};
-
+//发�?�配置文�?
+public int send(File file) {
+        int tag=0;
+        ArrayList<Block> blocks = new ArrayList<Block>();
+        double roomwidth = 0;
+        double roomlength = 0;
+        //open file
+        System.out.println(file.getAbsolutePath());
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line = "";
+            String[] arrs = null;
+            if ((line = br.readLine()) != null) {
+                arrs = line.split(" ");
+                roomwidth = Double.parseDouble(arrs[1]);
+                roomlength = Double.parseDouble(arrs[3]);
+            }
+            while ((line = br.readLine()) != null) {
+                arrs = line.split(" ");
+                double type = Double.parseDouble(arrs[0]);
+                ControlClient.BlockType btype;
+                if (type == 1) {
+                    btype = ControlClient.BlockType.CUBE;
+                } else {
+                    btype = ControlClient.BlockType.CYLINDER;
+                }
+                blocks.add(ControlClient.SetBlock(btype,
+                        Double.parseDouble(arrs[1]),
+                        Double.parseDouble(arrs[2]),
+                        Double.parseDouble(arrs[3]),
+                        Double.parseDouble(arrs[4])));
+            }
+            //send config
+            
+            //tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
+            tag+=ControlClient.SendConfigMap(ControlClient.Receiver.ROBOT, roomwidth, roomlength, blocks);
+            br.close();
+            fr.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ;
+        return tag;
+    }
+//路径规划初始�?
+public void cal_initial_position(double x,double y) {
+	cal_px_temp=x*Coeff_x+delta_x;
+	cal_py_temp=Y-y*Coeff_y+delta_y;
+};
+//路径规划显示
+public void cal_temp_position(double x,double y) {
+	Line  l=new Line();
+	l.setStartX(cal_px_temp);
+	l.setStartY(cal_py_temp);
+	cal_px_temp=x*Coeff_x+delta_x;
+	cal_py_temp=Y-y*Coeff_y+delta_y;
+	l.setEndX(cal_px_temp);
+	l.setEndY(cal_py_temp);
+	l.setStroke(Paint.valueOf("#0000FF"));
+	Env.getChildren().add(l);
 }
+
+};
