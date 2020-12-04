@@ -25,6 +25,7 @@ import javafx.application.Platform;
 public class ControlServices extends MsgServicesImplBase{
         Environment Env=Main.Env;
 	private static boolean isstart=true;
+        static int initime=0;
 	@Override
 	public void robotPosition(RBPosition request, StreamObserver<Response> responseObserver) {
 		/*
@@ -45,14 +46,15 @@ public class ControlServices extends MsgServicesImplBase{
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
                 Main.setofp.add(new Main.pointi(posx,posy,angle,vx,vy,timestamp));
-                Main.Cha.add_data(timestamp, posx, posy, vx, vy, angle);
+                
                 if(isstart==true)
                 {   Platform.runLater(()->{Env.initial_position(posx,posy,angle);});
+                    initime=timestamp;
                     isstart=false;
                 }
                 else 
                     Platform.runLater(()->{Env.temp_position(posx,posy,angle);});
-                
+                Platform.runLater(()->{Main.Cha.add_data(timestamp-initime, posx, posy, vx, vy, angle);});
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
