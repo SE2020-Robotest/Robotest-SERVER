@@ -305,13 +305,16 @@ public class Main extends Application {
                 root.addEventFilter(KeyEvent.KEY_PRESSED, event->{
                     ControlClient.DriveCommand cmd;
                     switch(event.getCode()){
-                        case UP:cmd=ControlClient.DriveCommand.FRONT;break;
-                        case DOWN:cmd=ControlClient.DriveCommand.BACK;break;
-                        case LEFT:cmd=ControlClient.DriveCommand.LEFT;break;
-                        case RIGHT:cmd=ControlClient.DriveCommand.RIGHT;break;
-                        default:return;
+                        case W:cmd=ControlClient.DriveCommand.FRONT;break;
+                        case S:cmd=ControlClient.DriveCommand.BACK;break;
+                        case Q:cmd=ControlClient.DriveCommand.LEFT;break;
+                        case E:cmd=ControlClient.DriveCommand.RIGHT;break;
+                        case A:cmd=ControlClient.DriveCommand.CLOCKWISE;break;
+                        case D:cmd=ControlClient.DriveCommand.ANTICLOCKWISE;break;
+                        default:event.consume();return;
                     }
                     ControlClient.SendDriveCommand(ControlClient.Receiver.ROBOT,cmd);
+                    
                     event.consume();
                 });
 		Scene scene = new Scene(root,1200,800);
