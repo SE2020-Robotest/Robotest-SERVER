@@ -31,7 +31,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import msg.grpc.Block;
 import services.ControlClient;
-
+import application.Main;
 
 public class Environment {
 Group Env;
@@ -226,8 +226,10 @@ public void read(File fd) throws IOException{
 		}
 		
 	}
+        br.close();
+        fr.close();
 };
-//发�?�配置文�?
+//发送配置文件
 public int send(File file) {
         int tag=0;
         ArrayList<Block> blocks = new ArrayList<Block>();
@@ -241,17 +243,19 @@ public int send(File file) {
             String line = "";
             String[] arrs = null;
             if ((line = br.readLine()) != null) {
+                Main.conf.add(line);
                 arrs = line.split(" ");
                 roomwidth = Double.parseDouble(arrs[1]);
                 roomlength = Double.parseDouble(arrs[3]);
             }
             while ((line = br.readLine()) != null) {
+                Main.conf.add(line);
                 arrs = line.split(" ");
                 double type = Double.parseDouble(arrs[0]);
                 ControlClient.BlockType btype;
                 if (type == 1) {
                     btype = ControlClient.BlockType.CUBE;
-                } else {
+                } else{
                     btype = ControlClient.BlockType.CYLINDER;
                 }
                 blocks.add(ControlClient.SetBlock(btype,
@@ -261,9 +265,9 @@ public int send(File file) {
                         Double.parseDouble(arrs[4])));
             }
             //send config
-            
-            //tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
             tag+=ControlClient.SendConfigMap(ControlClient.Receiver.ROBOT, roomwidth, roomlength, blocks);
+            //tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
+            
             br.close();
             fr.close();
         } catch (FileNotFoundException ex) {
@@ -274,7 +278,7 @@ public int send(File file) {
         ;
         return tag;
     }
-//路径规划初始�?
+//路径规划初始化
 public void cal_initial_position(double x,double y) {
 	cal_px_temp=x*Coeff_x+delta_x;
 	cal_py_temp=Y-y*Coeff_y+delta_y;
