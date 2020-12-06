@@ -12,10 +12,12 @@ import java.io.IOException;
 import java.lang.Thread;
 import com.sun.javafx.scene.SceneEventDispatcher;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -49,16 +51,19 @@ import msg.grpc.Block;
 
 
 public class Main extends Application {
+    void clearall(){
+        
+    }
     static int co=0;
-    static int chartcate=1;
+    static int chartcate=1;//图表类型
         void testit(){
-            setofp.add(new pointi(21,0,0,0,0,0));
-            setofp.add(new pointi(22,0,0,0,0,0));
-            setofp.add(new pointi(23,0,0,0,0,0));
+            setofp.add(new pointi(21,30,0,4,7,0));
+            setofp.add(new pointi(32,40,12,9,1,5));
+            setofp.add(new pointi(42,50,23,12,23,10));
             ArrayList<pot> tis=new ArrayList<pot>();
-            tis.add(new pot(3+co,0));
-            tis.add(new pot(4+co,0));
-            tis.add(new pot(5+co,0));
+            tis.add(new pot(3+co,34));
+            tis.add(new pot(14+co,65));
+            tis.add(new pot(25+co,90));
             co++;
             setofpath.add(tis);
         }
@@ -74,12 +79,14 @@ public class Main extends Application {
         posx=a1;posy=a2;angle=a3;vx=a4;vy=a5;timestamp=a6;
     }
     }
+        File confm;
         public static ArrayList<pointi> setofp=new ArrayList<pointi>();//array that save imformation of points
         public static ArrayList<ArrayList<pot>> setofpath=new ArrayList<ArrayList<pot>>();
         public static ArrayList<String> voiceresult=new ArrayList<String>();
 	public static Group root = new Group();
 	public static Environment Env=new Environment(root);
         public static Chart Cha=new Chart(root);
+        public static ArrayList<String> conf=new ArrayList<String>();
 	@Override
 	public void start(Stage primaryStage) {
                 primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -87,7 +94,7 @@ public class Main extends Application {
                 public void handle(WindowEvent event) {
                 System.exit(0);
                 }});
-                testit();testit();
+                //testit();testit();
                 Runnable startexp=new Runnable(){
                         public void run(){
                             try {
@@ -149,7 +156,7 @@ public class Main extends Application {
 		Button_type b5 = new Button_type(1020, 500, "保存配置");
 		Button_type b6 = new Button_type(1020, 600, "退出");
                 Button_type b7 = new Button_type(620, 700, "数据读取");
-                 
+                
 		b1.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -157,6 +164,7 @@ public class Main extends Application {
 				FileChooser fc = new FileChooser();
 				fc.setTitle("选择文件");
 				File file=fc.showOpenDialog(stage1);
+                                
 				if (file==null) {
 					return;
 				}
@@ -182,10 +190,12 @@ public class Main extends Application {
                         
                         
                         int tag=0;
-                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.CONNECT);
                         tag+=ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.CONNECT);
-                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
                         tag+=ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.START);
+                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.CONNECT);
+                        
+                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
+                        
                         if(tag==0)
                             System.out.println("连接并开始成功");
                         else
@@ -198,6 +208,7 @@ public class Main extends Application {
                 b3.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+                            clearall();
                    //ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.STOP);
                    ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.STOP);
                    System.out.println("实验已停止");
@@ -207,12 +218,23 @@ public class Main extends Application {
 			public void handle(ActionEvent event) {
                             try
                                 {
+                                     FileChooser fileChooser = new FileChooser();
+                                    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                                    fileChooser.getExtensionFilters().add(extFilter);
+                                    Stage s = new Stage();
+                                    File file = fileChooser.showSaveDialog(s);
+                                    if (file == null)
+                                        return;
+                                    if(file.exists()){//文件已存在，则删除覆盖文件
+                                        file.delete();
+                                    }
                                    FileOutputStream fileOut =
-                                   new FileOutputStream("./data.txt");
+                                   new FileOutputStream(file);
                                    ObjectOutputStream out = new ObjectOutputStream(fileOut);
                                    out.writeObject(setofp);
                                    out.writeObject(setofpath);
                                    out.writeObject(voiceresult);
+                                   out.writeObject(conf);
                                    out.close();
                                    fileOut.close();
                                    System.out.printf("数据已保存");
@@ -253,16 +275,58 @@ public class Main extends Application {
 			public void handle(ActionEvent event) {
                             try
                         {
-                           FileInputStream fileIn = new FileInputStream("./data.txt");
+                            Stage stage1=new Stage();
+				FileChooser fc = new FileChooser();
+				fc.setTitle("导入数据");
+				File file=fc.showOpenDialog(stage1);
+				if (file==null) {
+					return;
+				}
+                           FileInputStream fileIn = new FileInputStream(file);
                            ObjectInputStream in = new ObjectInputStream(fileIn);
                            ArrayList<pointi> ppp= (ArrayList<pointi>) in.readObject();
+                           
                            ArrayList<ArrayList<pot>> ppp2=(ArrayList<ArrayList<pot>>) in.readObject();
-                           for(pointi p1:ppp)
-                               System.out.println(p1.posx);
+                           
+                           ArrayList<String> voc=(ArrayList<String>) in.readObject();
+                           ArrayList<String> confm=(ArrayList<String>) in.readObject();
+                           File conftemp=new File("./conf.tmp");
+                           FileWriter fw = new FileWriter(conftemp);
+                           BufferedWriter bw = new BufferedWriter(fw);
+                           for (String line:confm){
+                               bw.write(line);
+                               bw.newLine();
+                           }
+                           bw.close();
+                           fw.close();
+                           Env.read(conftemp);
+                           conftemp.delete();
+                           boolean tag1=true;
+                           double timestampzero=ppp.get(0).timestamp;
+                           for(pointi p1:ppp){
+                               if(tag1)
+                               {
+                                   Env.initial_position(p1.posx, p1.posy, p1.angle);
+                                   tag1=false;
+                               }
+                               else
+                                   Env.temp_position(p1.posx, p1.posy, p1.angle);
+                               Cha.add_data(p1.timestamp-timestampzero, p1.posx, p1.posy, p1.vx, p1.vy, p1.angle);
+                               //Thread.sleep(10);
+                               
+                           }
                            System.out.println("||");
                            for(ArrayList<pot>pp2:ppp2){
-                               for(pot p2:pp2)
-                                   System.out.println(p2.posx);
+                               boolean tag2=true;
+                               for(pot p2:pp2){
+                                   if (tag2){
+                                       tag2=false;
+                                       Env.cal_initial_position(p2.posx, p2.posy);
+                                   }
+                                   else
+                                       Env.cal_temp_position(p2.posx, p2.posy);
+                                   
+                               }
                                System.out.println("apath read");
                            }
                            in.close();
@@ -276,7 +340,9 @@ public class Main extends Application {
                            System.out.println("class not found");
                            c.printStackTrace();
                            return;
-                        }
+                        }   /*catch (InterruptedException ex) {
+                                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                            }*/
                         }
                 });//read data
 		root.getChildren().add(b1.button);
@@ -295,6 +361,7 @@ public class Main extends Application {
 		text.setPrefWidth(550);
 		text.setPrefHeight(270);
 		text.setWrapText(true);
+                text.setEditable(false);
 		root.getChildren().add(text);
 		/*root.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override
