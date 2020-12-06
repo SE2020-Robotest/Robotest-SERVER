@@ -55,7 +55,7 @@ public void add_data(double t,double x,double y,double v_x,double v_y,double ang
 	vx.getData().add(data3);
 	XYChart.Data<Number, Number> data4 = new XYChart.Data<>(t,v_y);
 	vy.getData().add(data4);
-	XYChart.Data<Number, Number> data5 = new XYChart.Data<>(t,angle/3.1416*180);
+	XYChart.Data<Number, Number> data5 = new XYChart.Data<>(t,angle);
 	ang.getData().add(data5);
 	if (t>20) {
 		axis_x.setUpperBound((int)t+2);
@@ -104,8 +104,8 @@ public void print_chart(int flag) {
 		}
 	if (flag==2) {
 		chart.getData().add(ang);
-		axis_y.setUpperBound((int)(max_ang/3.1416*180)+5);
-		axis_y.setLowerBound((int)(min_ang/3.1416*180)-5);
+		axis_y.setUpperBound((int)(max_ang)+5);
+		axis_y.setLowerBound((int)(min_ang)-5);
 		axis_y.setLabel("Angle (Degree)");
 		axis_y.setTickUnit(30);
 		}
