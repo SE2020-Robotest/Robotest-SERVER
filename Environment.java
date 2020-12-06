@@ -38,6 +38,9 @@ Group Env;
 double data[][]=null;
 double X;				//width of the ground
 double Y;				//height of the ground
+double initial_x;
+double initial_y;
+double r;
 double Coeff_x;		//the coeff of x
 double Coeff_y;
 double delta_x;
@@ -67,8 +70,11 @@ public void Environment_initial(double x,double y)throws IOException {
 		X=H*x/y;
 		Y=H;
 	}
+	initial_x=x;
+	initial_y=y;
 	Coeff_x=X/x;
 	Coeff_y=Y/y;
+	r=15*Coeff_x;
 	delta_x=(550-X)/2+30;
 	delta_y=(H-Y)/2+30;
 	
@@ -94,7 +100,7 @@ public void Environment_initial(double x,double y)throws IOException {
 	}
 
 };
-//构�?�长方形
+//构造长方形
 public void rec(double x,double y,double px,double py,Color c) throws IOException{
 	javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle();
 	rec.setX((px-x/2)*Coeff_x+delta_x);
@@ -107,6 +113,16 @@ public void rec(double x,double y,double px,double py,Color c) throws IOExceptio
 	Env.getChildren().add(rec);
 	bw.write("1 "+x+" "+y+" "+px+" "+py+"\n");
 };
+//构造圆形
+public void cir(double x,double y,double px,double py,Color c) throws IOException{
+	Circle cir2 = new Circle();
+	cir2.setCenterX((px-x/2)*Coeff_x+delta_x);
+	cir2.setCenterY(Y-(py+y/2)*Coeff_y+delta_y);
+	cir2.setRadius((x*Coeff_x));
+	cir2.setFill(c);
+	Env.getChildren().add(cir2);
+	bw.write("2 "+x+" "+y+" "+px+" "+py+"\n");
+};
 //初始位置
 public void initial_position(double x,double y,double angle) {
 	Circle cir = new Circle();
@@ -114,13 +130,13 @@ public void initial_position(double x,double y,double angle) {
 	py_temp=Y-y*Coeff_y+delta_y;
 	cir.setCenterX(px_temp);
 	cir.setCenterY(py_temp);
-	cir.setRadius(4);
+	cir.setRadius(r+2);
 	cir.setFill(Color.BLACK);
 	Env.getChildren().add(cir);
 	Circle cir2 = new Circle();
 	cir2.setCenterX(px_temp);
 	cir2.setCenterY(py_temp);
-	cir2.setRadius(3);
+	cir2.setRadius(r);
 	cir2.setFill(Color.RED);
 	Env.getChildren().add(cir2);
 	posi_cir=Env.getChildren().size()-1;
@@ -204,6 +220,9 @@ public void read(File fd) throws IOException{
 		double type = Double.parseDouble(arrs[0]);
 		if (type==1) {
 			this.rec(Double.parseDouble(arrs[1]), Double.parseDouble(arrs[2]), Double.parseDouble(arrs[3]), Double.parseDouble(arrs[4]), Color.AQUAMARINE);
+		}
+		if (type==2) {
+			this.cir(Double.parseDouble(arrs[1]), Double.parseDouble(arrs[2]), Double.parseDouble(arrs[3]), Double.parseDouble(arrs[4]), Color.AQUAMARINE);
 		}
 		
 	}
