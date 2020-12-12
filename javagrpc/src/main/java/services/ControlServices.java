@@ -41,7 +41,7 @@ public class ControlServices extends MsgServicesImplBase{
                 
 		double vx = request.getVx();
 		double vy = request.getVy();
-		int timestamp = request.getTimestamp();
+		double timestamp = request.getTimestamp();
 		//System.out.printf("posx:%.2f\n posy:%.2f\n angle:%.2f\n vx:%.2f\n vy:%.2f\n timestamp:%d\n",posx, posy, angle, vx, vy, timestamp);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
@@ -69,8 +69,8 @@ public class ControlServices extends MsgServicesImplBase{
 		 * */
 		// the following code shows how to operate the data structure RBPath
                 ArrayList<Main.pot> apath=new ArrayList<Main.pot>();
-		int starttime = request.getStarttime();
-		int endtime = request.getEndtime();
+		double starttime = request.getStarttime();
+		double endtime = request.getEndtime();
 		System.out.printf("start time: %d, end time: %d", starttime, endtime);
 		List<Point> points = request.getPosList();
                 boolean isstart2=true;
