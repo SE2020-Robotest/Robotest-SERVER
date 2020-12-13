@@ -53,7 +53,22 @@ import msg.grpc.Block;
 public class Main extends Application {
     void clearall(){
         
+        cleardata();
+        //clearmap();
+        conf.clear();
+        System.out.println("all cleared");
     }
+    void cleardata(){
+        System.out.println("data cleared");
+        setofp.clear();
+        setofpath.clear();
+        voiceresult.clear();
+        
+        //clearpath();clearchart();
+    }
+    private boolean cmddrive=false;
+    public static boolean onexp=false;
+    public static boolean havemap=false;
     static int co=0;
     static int chartcate=1;//图表类型
         void testit(){
@@ -75,11 +90,11 @@ public class Main extends Application {
     }
         public static class pointi implements Serializable{
     double posx,posy,angle,vx,vy,timestamp;
-    public pointi(double a1,double a2,double a3, double a4,double a5,int a6){//posx,posy,angle,vx,vy,time
+    public pointi(double a1,double a2,double a3, double a4,double a5,double a6){//posx,posy,angle,vx,vy,time
         posx=a1;posy=a2;angle=a3;vx=a4;vy=a5;timestamp=a6;
     }
     }
-        File confm;
+        
         public static ArrayList<pointi> setofp=new ArrayList<pointi>();//array that save imformation of points
         public static ArrayList<ArrayList<pot>> setofpath=new ArrayList<ArrayList<pot>>();
         public static ArrayList<String> voiceresult=new ArrayList<String>();
@@ -93,9 +108,8 @@ public class Main extends Application {
                 @Override
                 public void handle(WindowEvent event) {
                 System.exit(0);
-                }});
-                //testit();testit();
-                Runnable startexp=new Runnable(){
+                }}); 
+                new Thread(new Runnable(){
                         public void run(){
                             try {
                                 ControlServer.StartServer();                              
@@ -105,8 +119,7 @@ public class Main extends Application {
                                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
-                    };
-                new Thread(startexp).start();
+                    }).start();
                 
                 final ToggleGroup tgroup = new ToggleGroup();
                 
@@ -149,17 +162,23 @@ public class Main extends Application {
                     }
                 }).start();
                 
-		Button_type b1 = new Button_type(620, 500, "发送配置");
-		Button_type b2 = new Button_type(820, 500, "开始实验");
-		Button_type b3 = new Button_type(620, 600, "结束实验");
-		Button_type b4 = new Button_type(820, 600, "数据保存");
-		Button_type b5 = new Button_type(1020, 500, "保存配置");
-		Button_type b6 = new Button_type(1020, 600, "退出");
-                Button_type b7 = new Button_type(620, 700, "数据读取");
-                
-		b1.button.setOnAction(new EventHandler<ActionEvent>() {
+		Button_type sendmap = new Button_type(1020, 500, "发送配置");
+		Button_type connect = new Button_type(620, 500, "建立连接");
+		Button_type stopexp = new Button_type(820, 600, "结束实验");
+		Button_type savedata = new Button_type(1020, 600, "数据保存");
+		Button_type startexp = new Button_type(820, 500, "开始实验");
+		Button_type shutdown = new Button_type(1020, 700, "退出");
+                Button_type loaddata = new Button_type(620, 700, "数据读取");
+                Button_type keydrive = new Button_type(620, 600, "键盘开车");
+                startexp.button.setDisable(true);
+                sendmap.button.setDisable(true);
+                savedata.button.setDisable(true);
+                stopexp.button.setDisable(true);
+                keydrive.button.setDisable(true);
+		sendmap.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+                                clearall();
 				Stage stage1=new Stage();
 				FileChooser fc = new FileChooser();
 				fc.setTitle("选择文件");
@@ -169,51 +188,102 @@ public class Main extends Application {
 					return;
 				}
 				System.out.println(file.getAbsolutePath());
-				try {
-					Env.read(file);
-                                        Env.send(file);
-                                       
-                                        if(0==0)
-                                            System.out.println("配置文件发送成功");
-                                        else
-                                            System.out.println("发送失败");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				
+                                try{
+                                Env.read(file);}
+                                catch (IOException e) {
+                                e.printStackTrace();
+                                } 
+                                catch(Throwable e){
+                                    System.out.println("invalid map");
+                                    conf.clear();
+                                    return;
+                                }
+                                new Thread(new Runnable(){
+                                    public void run(){
+                                        try{
+                                            Env.send(file,ControlClient.Receiver.ROBOT);
+                                            System.out.println("Send map to ROBOT successfully");
+                                        }
+                                        catch(Throwable e){
+                                            System.out.println("Fail to send map to ROBOT");
+                                        }
+                                    }
+                                }).start();
+                                new Thread(new Runnable(){
+                                    public void run(){
+                                        try{
+                                            Env.send(file,ControlClient.Receiver.AR);
+                                            System.out.println("Send map to AR successfully");
+                                        }
+                                        catch(Throwable e){
+                                            System.out.println("Fail to send map to AR");
+                                        }
+                                    }
+                                }).start();
+                                havemap=true;
+
+
+                                sendmap.button.setDisable(true);
+                                keydrive.button.setDisable(false);
 			}
 		});
-                b2.button.setOnAction(new EventHandler<ActionEvent>() {
+                connect.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-                    
-                    try {
-                        
-                        
-                        int tag=0;
-                        tag+=ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.CONNECT);
-                        tag+=ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.START);
-                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.CONNECT);
-                        
-                        //tag+=ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
-                        
-                        if(tag==0)
-                            System.out.println("连接并开始成功");
-                        else
-                            System.out.println("连接并开始失败");
-                }   
-                        catch(Throwable t){
-                        t.printStackTrace();
-                        }
+                        new Thread(new Runnable(){
+                            public void run(){
+                                try{
+                                    ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.CONNECT);
+                                    System.out.println("Build connect with ROBOT successfully");
+                                }catch(Throwable a){
+                                    System.out.println("Failed to build connect with ROBOT");
+                                }                            }
+                        }).start();
+                        new Thread(new Runnable(){
+                            public void run(){
+                                try{
+                                    ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.CONNECT);
+                                    System.out.println("Build connect with AR successfully");
+                                }catch(Throwable a){
+                                    System.out.println("Failed to build connect with AR");
+                                }                                
+                            }
+                        }).start();
+                        startexp.button.setDisable(false);      
                 }});
-                b3.button.setOnAction(new EventHandler<ActionEvent>() {
+                stopexp.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-                            clearall();
-                   //ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.STOP);
-                   ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.STOP);
-                   System.out.println("实验已停止");
+                        new Thread(new Runnable(){
+                            public void run(){
+                                try{
+                                    ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.STOP);
+                                    System.out.println("Stop with ROBOT successfully");
+                                    onexp=false;
+                                }catch(Throwable a){
+                                    System.out.println("Failed to Stop with ROBOT");
+                                }                            }
+                        }).start();
+                        new Thread(new Runnable(){
+                            public void run(){
+                                try{
+                                    ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.STOP);
+                                    System.out.println("Stop with AR successfully");
+                                }catch(Throwable a){
+                                    System.out.println("Failed to Stop with AR");
+                                }                                
+                            }
+                        }).start();
+                        startexp.button.setDisable(false);
+                        sendmap.button.setDisable(true);
+                        loaddata.button.setDisable(false);
+                        savedata.button.setDisable(false);
+                        keydrive.button.setDisable(true);
+                        stopexp.button.setDisable(true);
+                        onexp=false;
                 }});
-                b4.button.setOnAction(new EventHandler<ActionEvent>(){
+                savedata.button.setOnAction(new EventHandler<ActionEvent>(){
                     @Override
 			public void handle(ActionEvent event) {
                             try
@@ -245,34 +315,53 @@ public class Main extends Application {
                             
                         }
                 });//save data
-		b5.button.setOnAction(new EventHandler<ActionEvent>() {
+		startexp.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Stage stage1=new Stage();
-				FileChooser fc = new FileChooser();
-				fc.setTitle("保存配置文件");
-				File file=fc.showOpenDialog(stage1);
-				if (file==null) {
-					return;
-				}
-					try {
-						Env.save(file);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+                            cleardata();
+                            new Thread(new Runnable(){
+                            public void run(){
+                                try{
+                                    ControlClient.SendControlCommand(ControlClient.Receiver.ROBOT, ControlClient.Command.START);
+                                    System.out.println("Start with ROBOT successfully");
+                                    onexp=true;
+                                    
+                                }catch(Throwable a){
+                                    System.out.println("Failed to Start with ROBOT");
+                                }                            }
+                        }).start();
+                        new Thread(new Runnable(){
+                            public void run(){
+                                try{
+                                    ControlClient.SendControlCommand(ControlClient.Receiver.AR, ControlClient.Command.START);
+                                    System.out.println("Start with AR successfully");
+                                    
+                                }catch(Throwable a){
+                                    System.out.println("Failed to start with AR");
+                                }                                
+                            }
+                        }).start();
+                        stopexp.button.setDisable(false);
+                        sendmap.button.setDisable(false);
+                        startexp.button.setDisable(true);
+                        loaddata.button.setDisable(true);
+                        savedata.button.setDisable(true);
+                        if(havemap)
+                            keydrive.button.setDisable(false);
 			}
 		});
-		b6.button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		shutdown.button.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+                                ControlServer.StopServer();
 				System.exit(0);
 				
 			}
 		});
-                b7.button.setOnAction(new EventHandler<ActionEvent>() {
+                loaddata.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+                            clearall();
                             try
                         {
                             Stage stage1=new Stage();
@@ -302,7 +391,9 @@ public class Main extends Application {
                            Env.read(conftemp);
                            conftemp.delete();
                            boolean tag1=true;
-                           double timestampzero=ppp.get(0).timestamp;
+                           double timestampzero=0;
+                           if(!ppp.isEmpty())
+                           {timestampzero=ppp.get(0).timestamp;}
                            for(pointi p1:ppp){
                                if(tag1)
                                {
@@ -316,6 +407,7 @@ public class Main extends Application {
                                
                            }
                            System.out.println("||");
+                           
                            for(ArrayList<pot>pp2:ppp2){
                                boolean tag2=true;
                                for(pot p2:pp2){
@@ -331,7 +423,9 @@ public class Main extends Application {
                            }
                            in.close();
                            fileIn.close();
-                        }catch(IOException i)
+                        }catch(java.io.StreamCorruptedException e)
+                        {System.out.println("Invalid file");return;}
+                        catch(IOException i)
                         {
                            i.printStackTrace();
                            return;
@@ -340,18 +434,32 @@ public class Main extends Application {
                            System.out.println("class not found");
                            c.printStackTrace();
                            return;
-                        }   /*catch (InterruptedException ex) {
+                        }
+                            /*catch (InterruptedException ex) {
                                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                             }*/
+                            
+                        savedata.button.setDisable(true);
+                        havemap=false;
                         }
                 });//read data
-		root.getChildren().add(b1.button);
-		root.getChildren().add(b2.button);
-		root.getChildren().add(b3.button);
-		root.getChildren().add(b4.button);
-		root.getChildren().add(b5.button);
-		root.getChildren().add(b6.button);
-		root.getChildren().add(b7.button);
+                keydrive.button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+                            cmddrive=!cmddrive;
+                            if(cmddrive)
+                                keydrive.button.setText("结束开车");
+                            else
+                                keydrive.button.setText("键盘开车");
+                        }});
+		root.getChildren().add(sendmap.button);
+		root.getChildren().add(connect.button);
+		root.getChildren().add(stopexp.button);
+		root.getChildren().add(savedata.button);
+		root.getChildren().add(startexp.button);
+		root.getChildren().add(shutdown.button);
+		root.getChildren().add(loaddata.button);
+                root.getChildren().add(keydrive.button);
 		TextArea text=new TextArea();
 		Tooltip tip2 = new Tooltip("测试文本框");
 		tip2.setFont(Font.font(40));
@@ -371,13 +479,17 @@ public class Main extends Application {
 		});*/
                 root.addEventFilter(KeyEvent.KEY_PRESSED, event->{
                     ControlClient.DriveCommand cmd;
+                    if(!cmddrive){
+                        event.consume();
+                        return;
+                    }
                     switch(event.getCode()){
-                        case W:cmd=ControlClient.DriveCommand.FRONT;break;
-                        case S:cmd=ControlClient.DriveCommand.BACK;break;
+                        case UP:cmd=ControlClient.DriveCommand.FRONT;break;
+                        case DOWN:cmd=ControlClient.DriveCommand.BACK;break;
                         case Q:cmd=ControlClient.DriveCommand.LEFT;break;
                         case E:cmd=ControlClient.DriveCommand.RIGHT;break;
-                        case A:cmd=ControlClient.DriveCommand.CLOCKWISE;break;
-                        case D:cmd=ControlClient.DriveCommand.ANTICLOCKWISE;break;
+                        case LEFT:cmd=ControlClient.DriveCommand.CLOCKWISE;break;
+                        case RIGHT:cmd=ControlClient.DriveCommand.ANTICLOCKWISE;break;
                         default:event.consume();return;
                     }
                     ControlClient.SendDriveCommand(ControlClient.Receiver.ROBOT,cmd);

@@ -212,10 +212,12 @@ public void read(File fd) throws IOException{
 	String line = "";
 	String[] arrs = null;
 	if((line = br.readLine())!=null) {
+                Main.conf.add(line);
 		arrs = line.split(" ");
 		this.Environment_initial(Double.parseDouble(arrs[1]),Double.parseDouble(arrs[3]));
 	}
 	while((line = br.readLine())!=null) {
+                Main.conf.add(line);
 		arrs = line.split(" ");
 		double type = Double.parseDouble(arrs[0]);
 		if (type==1) {
@@ -230,53 +232,38 @@ public void read(File fd) throws IOException{
         fr.close();
 };
 //发送配置文件
-public int send(File file) {
-        int tag=0;
+public void send(File file, ControlClient.Receiver receiver) throws IOException{
         ArrayList<Block> blocks = new ArrayList<Block>();
         double roomwidth = 0;
         double roomlength = 0;
-        //open file
-        System.out.println(file.getAbsolutePath());
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            String line = "";
-            String[] arrs = null;
-            if ((line = br.readLine()) != null) {
-                Main.conf.add(line);
-                arrs = line.split(" ");
-                roomwidth = Double.parseDouble(arrs[1]);
-                roomlength = Double.parseDouble(arrs[3]);
-            }
-            while ((line = br.readLine()) != null) {
-                Main.conf.add(line);
-                arrs = line.split(" ");
-                double type = Double.parseDouble(arrs[0]);
-                ControlClient.BlockType btype;
-                if (type == 1) {
-                    btype = ControlClient.BlockType.CUBE;
-                } else{
-                    btype = ControlClient.BlockType.CYLINDER;
-                }
-                blocks.add(ControlClient.SetBlock(btype,
-                        Double.parseDouble(arrs[1]),
-                        Double.parseDouble(arrs[2]),
-                        Double.parseDouble(arrs[3]),
-                        Double.parseDouble(arrs[4])));
-            }
-            //send config
-            tag+=ControlClient.SendConfigMap(ControlClient.Receiver.ROBOT, roomwidth, roomlength, blocks);
-            //tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
-            
-            br.close();
-            fr.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+        //System.out.println(file.getAbsolutePath());
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        String line = "";
+        String[] arrs = null;
+        if ((line = br.readLine()) != null) {    
+            arrs = line.split(" ");
+            roomwidth = Double.parseDouble(arrs[1]);
+            roomlength = Double.parseDouble(arrs[3]);
         }
-        ;
-        return tag;
+        while ((line = br.readLine()) != null) {
+            arrs = line.split(" ");
+            double type = Double.parseDouble(arrs[0]);
+            ControlClient.BlockType btype;
+            if (type == 1) {
+                btype = ControlClient.BlockType.CUBE;
+            } else{
+                btype = ControlClient.BlockType.CYLINDER;
+            }
+            blocks.add(ControlClient.SetBlock(btype,
+                    Double.parseDouble(arrs[1]),
+                    Double.parseDouble(arrs[2]),
+                    Double.parseDouble(arrs[3]),
+                    Double.parseDouble(arrs[4])));
+        } 
+        ControlClient.SendConfigMap(receiver, roomwidth, roomlength, blocks);
+        br.close();
+        fr.close();
     }
 //路径规划初始化
 public void cal_initial_position(double x,double y) {
