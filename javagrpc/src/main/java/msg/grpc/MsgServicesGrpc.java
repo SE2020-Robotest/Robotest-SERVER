@@ -182,6 +182,37 @@ public final class MsgServicesGrpc {
     return getVoiceResultMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<msg.grpc.LogStr,
+      msg.grpc.Response> getLogMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "Log",
+      requestType = msg.grpc.LogStr.class,
+      responseType = msg.grpc.Response.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<msg.grpc.LogStr,
+      msg.grpc.Response> getLogMethod() {
+    io.grpc.MethodDescriptor<msg.grpc.LogStr, msg.grpc.Response> getLogMethod;
+    if ((getLogMethod = MsgServicesGrpc.getLogMethod) == null) {
+      synchronized (MsgServicesGrpc.class) {
+        if ((getLogMethod = MsgServicesGrpc.getLogMethod) == null) {
+          MsgServicesGrpc.getLogMethod = getLogMethod =
+              io.grpc.MethodDescriptor.<msg.grpc.LogStr, msg.grpc.Response>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "Log"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  msg.grpc.LogStr.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  msg.grpc.Response.getDefaultInstance()))
+              .setSchemaDescriptor(new MsgServicesMethodDescriptorSupplier("Log"))
+              .build();
+        }
+      }
+    }
+    return getLogMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<msg.grpc.ControlCmd,
       msg.grpc.Response> getControlCommandMethod;
 
@@ -360,6 +391,13 @@ public final class MsgServicesGrpc {
 
     /**
      */
+    public void log(msg.grpc.LogStr request,
+        io.grpc.stub.StreamObserver<msg.grpc.Response> responseObserver) {
+      asyncUnimplementedUnaryCall(getLogMethod(), responseObserver);
+    }
+
+    /**
+     */
     public void controlCommand(msg.grpc.ControlCmd request,
         io.grpc.stub.StreamObserver<msg.grpc.Response> responseObserver) {
       asyncUnimplementedUnaryCall(getControlCommandMethod(), responseObserver);
@@ -416,6 +454,13 @@ public final class MsgServicesGrpc {
                 msg.grpc.VoiceStr,
                 msg.grpc.Response>(
                   this, METHODID_VOICE_RESULT)))
+          .addMethod(
+            getLogMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                msg.grpc.LogStr,
+                msg.grpc.Response>(
+                  this, METHODID_LOG)))
           .addMethod(
             getControlCommandMethod(),
             asyncUnaryCall(
@@ -497,6 +542,14 @@ public final class MsgServicesGrpc {
 
     /**
      */
+    public void log(msg.grpc.LogStr request,
+        io.grpc.stub.StreamObserver<msg.grpc.Response> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getLogMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
     public void controlCommand(msg.grpc.ControlCmd request,
         io.grpc.stub.StreamObserver<msg.grpc.Response> responseObserver) {
       asyncUnaryCall(
@@ -560,6 +613,13 @@ public final class MsgServicesGrpc {
     public msg.grpc.Response voiceResult(msg.grpc.VoiceStr request) {
       return blockingUnaryCall(
           getChannel(), getVoiceResultMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public msg.grpc.Response log(msg.grpc.LogStr request) {
+      return blockingUnaryCall(
+          getChannel(), getLogMethod(), getCallOptions(), request);
     }
 
     /**
@@ -632,6 +692,14 @@ public final class MsgServicesGrpc {
 
     /**
      */
+    public com.google.common.util.concurrent.ListenableFuture<msg.grpc.Response> log(
+        msg.grpc.LogStr request) {
+      return futureUnaryCall(
+          getChannel().newCall(getLogMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
     public com.google.common.util.concurrent.ListenableFuture<msg.grpc.Response> controlCommand(
         msg.grpc.ControlCmd request) {
       return futureUnaryCall(
@@ -659,10 +727,11 @@ public final class MsgServicesGrpc {
   private static final int METHODID_ROBOT_POSITION = 1;
   private static final int METHODID_ROBOT_PATH = 2;
   private static final int METHODID_VOICE_RESULT = 3;
-  private static final int METHODID_CONTROL_COMMAND = 4;
-  private static final int METHODID_ROBOT_FINISHED = 5;
-  private static final int METHODID_DRIVE_ROBOT = 6;
-  private static final int METHODID_SEND_VOICE_FILE = 7;
+  private static final int METHODID_LOG = 4;
+  private static final int METHODID_CONTROL_COMMAND = 5;
+  private static final int METHODID_ROBOT_FINISHED = 6;
+  private static final int METHODID_DRIVE_ROBOT = 7;
+  private static final int METHODID_SEND_VOICE_FILE = 8;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -695,6 +764,10 @@ public final class MsgServicesGrpc {
           break;
         case METHODID_VOICE_RESULT:
           serviceImpl.voiceResult((msg.grpc.VoiceStr) request,
+              (io.grpc.stub.StreamObserver<msg.grpc.Response>) responseObserver);
+          break;
+        case METHODID_LOG:
+          serviceImpl.log((msg.grpc.LogStr) request,
               (io.grpc.stub.StreamObserver<msg.grpc.Response>) responseObserver);
           break;
         case METHODID_CONTROL_COMMAND:
@@ -778,6 +851,7 @@ public final class MsgServicesGrpc {
               .addMethod(getRobotPathMethod())
               .addMethod(getSendVoiceFileMethod())
               .addMethod(getVoiceResultMethod())
+              .addMethod(getLogMethod())
               .addMethod(getControlCommandMethod())
               .addMethod(getRobotFinishedMethod())
               .addMethod(getDriveRobotMethod())

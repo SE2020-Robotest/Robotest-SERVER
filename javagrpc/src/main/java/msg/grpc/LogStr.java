@@ -4,24 +4,19 @@
 package msg.grpc;
 
 /**
- * <pre>
- * voice recognition result
- * </pre>
- *
- * Protobuf type {@code msg.VoiceStr}
+ * Protobuf type {@code msg.LogStr}
  */
-public  final class VoiceStr extends
+public  final class LogStr extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:msg.VoiceStr)
-    VoiceStrOrBuilder {
+    // @@protoc_insertion_point(message_implements:msg.LogStr)
+    LogStrOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use VoiceStr.newBuilder() to construct.
-  private VoiceStr(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use LogStr.newBuilder() to construct.
+  private LogStr(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private VoiceStr() {
-    voice_ = "";
-    timestamp_ = 0D;
+  private LogStr() {
+    log_ = "";
   }
 
   @java.lang.Override
@@ -29,7 +24,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private VoiceStr(
+  private LogStr(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -51,12 +46,7 @@ private static final long serialVersionUID = 0L;
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            voice_ = s;
-            break;
-          }
-          case 17: {
-
-            timestamp_ = input.readDouble();
+            log_ = s;
             break;
           }
           default: {
@@ -80,58 +70,49 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return msg.grpc.Msg.internal_static_msg_VoiceStr_descriptor;
+    return msg.grpc.Msg.internal_static_msg_LogStr_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return msg.grpc.Msg.internal_static_msg_VoiceStr_fieldAccessorTable
+    return msg.grpc.Msg.internal_static_msg_LogStr_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            msg.grpc.VoiceStr.class, msg.grpc.VoiceStr.Builder.class);
+            msg.grpc.LogStr.class, msg.grpc.LogStr.Builder.class);
   }
 
-  public static final int VOICE_FIELD_NUMBER = 1;
-  private volatile java.lang.Object voice_;
+  public static final int LOG_FIELD_NUMBER = 1;
+  private volatile java.lang.Object log_;
   /**
-   * <code>string voice = 1;</code>
+   * <code>string log = 1;</code>
    */
-  public java.lang.String getVoice() {
-    java.lang.Object ref = voice_;
+  public java.lang.String getLog() {
+    java.lang.Object ref = log_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      voice_ = s;
+      log_ = s;
       return s;
     }
   }
   /**
-   * <code>string voice = 1;</code>
+   * <code>string log = 1;</code>
    */
   public com.google.protobuf.ByteString
-      getVoiceBytes() {
-    java.lang.Object ref = voice_;
+      getLogBytes() {
+    java.lang.Object ref = log_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      voice_ = b;
+      log_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
-  }
-
-  public static final int TIMESTAMP_FIELD_NUMBER = 2;
-  private double timestamp_;
-  /**
-   * <code>double timestamp = 2;</code>
-   */
-  public double getTimestamp() {
-    return timestamp_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -148,11 +129,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getVoiceBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, voice_);
-    }
-    if (timestamp_ != 0D) {
-      output.writeDouble(2, timestamp_);
+    if (!getLogBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, log_);
     }
     unknownFields.writeTo(output);
   }
@@ -163,12 +141,8 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getVoiceBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, voice_);
-    }
-    if (timestamp_ != 0D) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeDoubleSize(2, timestamp_);
+    if (!getLogBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, log_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -180,18 +154,14 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof msg.grpc.VoiceStr)) {
+    if (!(obj instanceof msg.grpc.LogStr)) {
       return super.equals(obj);
     }
-    msg.grpc.VoiceStr other = (msg.grpc.VoiceStr) obj;
+    msg.grpc.LogStr other = (msg.grpc.LogStr) obj;
 
     boolean result = true;
-    result = result && getVoice()
-        .equals(other.getVoice());
-    result = result && (
-        java.lang.Double.doubleToLongBits(getTimestamp())
-        == java.lang.Double.doubleToLongBits(
-            other.getTimestamp()));
+    result = result && getLog()
+        .equals(other.getLog());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -203,79 +173,76 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + VOICE_FIELD_NUMBER;
-    hash = (53 * hash) + getVoice().hashCode();
-    hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        java.lang.Double.doubleToLongBits(getTimestamp()));
+    hash = (37 * hash) + LOG_FIELD_NUMBER;
+    hash = (53 * hash) + getLog().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static msg.grpc.VoiceStr parseFrom(byte[] data)
+  public static msg.grpc.LogStr parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static msg.grpc.VoiceStr parseFrom(java.io.InputStream input)
+  public static msg.grpc.LogStr parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static msg.grpc.VoiceStr parseDelimitedFrom(java.io.InputStream input)
+  public static msg.grpc.LogStr parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static msg.grpc.VoiceStr parseDelimitedFrom(
+  public static msg.grpc.LogStr parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static msg.grpc.VoiceStr parseFrom(
+  public static msg.grpc.LogStr parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -288,7 +255,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(msg.grpc.VoiceStr prototype) {
+  public static Builder newBuilder(msg.grpc.LogStr prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -304,30 +271,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * <pre>
-   * voice recognition result
-   * </pre>
-   *
-   * Protobuf type {@code msg.VoiceStr}
+   * Protobuf type {@code msg.LogStr}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:msg.VoiceStr)
-      msg.grpc.VoiceStrOrBuilder {
+      // @@protoc_insertion_point(builder_implements:msg.LogStr)
+      msg.grpc.LogStrOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return msg.grpc.Msg.internal_static_msg_VoiceStr_descriptor;
+      return msg.grpc.Msg.internal_static_msg_LogStr_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return msg.grpc.Msg.internal_static_msg_VoiceStr_fieldAccessorTable
+      return msg.grpc.Msg.internal_static_msg_LogStr_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              msg.grpc.VoiceStr.class, msg.grpc.VoiceStr.Builder.class);
+              msg.grpc.LogStr.class, msg.grpc.LogStr.Builder.class);
     }
 
-    // Construct using msg.grpc.VoiceStr.newBuilder()
+    // Construct using msg.grpc.LogStr.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -345,9 +308,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      voice_ = "";
-
-      timestamp_ = 0D;
+      log_ = "";
 
       return this;
     }
@@ -355,17 +316,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return msg.grpc.Msg.internal_static_msg_VoiceStr_descriptor;
+      return msg.grpc.Msg.internal_static_msg_LogStr_descriptor;
     }
 
     @java.lang.Override
-    public msg.grpc.VoiceStr getDefaultInstanceForType() {
-      return msg.grpc.VoiceStr.getDefaultInstance();
+    public msg.grpc.LogStr getDefaultInstanceForType() {
+      return msg.grpc.LogStr.getDefaultInstance();
     }
 
     @java.lang.Override
-    public msg.grpc.VoiceStr build() {
-      msg.grpc.VoiceStr result = buildPartial();
+    public msg.grpc.LogStr build() {
+      msg.grpc.LogStr result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -373,10 +334,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public msg.grpc.VoiceStr buildPartial() {
-      msg.grpc.VoiceStr result = new msg.grpc.VoiceStr(this);
-      result.voice_ = voice_;
-      result.timestamp_ = timestamp_;
+    public msg.grpc.LogStr buildPartial() {
+      msg.grpc.LogStr result = new msg.grpc.LogStr(this);
+      result.log_ = log_;
       onBuilt();
       return result;
     }
@@ -415,22 +375,19 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof msg.grpc.VoiceStr) {
-        return mergeFrom((msg.grpc.VoiceStr)other);
+      if (other instanceof msg.grpc.LogStr) {
+        return mergeFrom((msg.grpc.LogStr)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(msg.grpc.VoiceStr other) {
-      if (other == msg.grpc.VoiceStr.getDefaultInstance()) return this;
-      if (!other.getVoice().isEmpty()) {
-        voice_ = other.voice_;
+    public Builder mergeFrom(msg.grpc.LogStr other) {
+      if (other == msg.grpc.LogStr.getDefaultInstance()) return this;
+      if (!other.getLog().isEmpty()) {
+        log_ = other.log_;
         onChanged();
-      }
-      if (other.getTimestamp() != 0D) {
-        setTimestamp(other.getTimestamp());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -447,11 +404,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      msg.grpc.VoiceStr parsedMessage = null;
+      msg.grpc.LogStr parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (msg.grpc.VoiceStr) e.getUnfinishedMessage();
+        parsedMessage = (msg.grpc.LogStr) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -461,97 +418,71 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object voice_ = "";
+    private java.lang.Object log_ = "";
     /**
-     * <code>string voice = 1;</code>
+     * <code>string log = 1;</code>
      */
-    public java.lang.String getVoice() {
-      java.lang.Object ref = voice_;
+    public java.lang.String getLog() {
+      java.lang.Object ref = log_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        voice_ = s;
+        log_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string voice = 1;</code>
+     * <code>string log = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getVoiceBytes() {
-      java.lang.Object ref = voice_;
+        getLogBytes() {
+      java.lang.Object ref = log_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        voice_ = b;
+        log_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string voice = 1;</code>
+     * <code>string log = 1;</code>
      */
-    public Builder setVoice(
+    public Builder setLog(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      voice_ = value;
+      log_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string voice = 1;</code>
+     * <code>string log = 1;</code>
      */
-    public Builder clearVoice() {
+    public Builder clearLog() {
       
-      voice_ = getDefaultInstance().getVoice();
+      log_ = getDefaultInstance().getLog();
       onChanged();
       return this;
     }
     /**
-     * <code>string voice = 1;</code>
+     * <code>string log = 1;</code>
      */
-    public Builder setVoiceBytes(
+    public Builder setLogBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      voice_ = value;
-      onChanged();
-      return this;
-    }
-
-    private double timestamp_ ;
-    /**
-     * <code>double timestamp = 2;</code>
-     */
-    public double getTimestamp() {
-      return timestamp_;
-    }
-    /**
-     * <code>double timestamp = 2;</code>
-     */
-    public Builder setTimestamp(double value) {
-      
-      timestamp_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>double timestamp = 2;</code>
-     */
-    public Builder clearTimestamp() {
-      
-      timestamp_ = 0D;
+      log_ = value;
       onChanged();
       return this;
     }
@@ -568,41 +499,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:msg.VoiceStr)
+    // @@protoc_insertion_point(builder_scope:msg.LogStr)
   }
 
-  // @@protoc_insertion_point(class_scope:msg.VoiceStr)
-  private static final msg.grpc.VoiceStr DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:msg.LogStr)
+  private static final msg.grpc.LogStr DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new msg.grpc.VoiceStr();
+    DEFAULT_INSTANCE = new msg.grpc.LogStr();
   }
 
-  public static msg.grpc.VoiceStr getDefaultInstance() {
+  public static msg.grpc.LogStr getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<VoiceStr>
-      PARSER = new com.google.protobuf.AbstractParser<VoiceStr>() {
+  private static final com.google.protobuf.Parser<LogStr>
+      PARSER = new com.google.protobuf.AbstractParser<LogStr>() {
     @java.lang.Override
-    public VoiceStr parsePartialFrom(
+    public LogStr parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new VoiceStr(input, extensionRegistry);
+      return new LogStr(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<VoiceStr> parser() {
+  public static com.google.protobuf.Parser<LogStr> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<VoiceStr> getParserForType() {
+  public com.google.protobuf.Parser<LogStr> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public msg.grpc.VoiceStr getDefaultInstanceForType() {
+  public msg.grpc.LogStr getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

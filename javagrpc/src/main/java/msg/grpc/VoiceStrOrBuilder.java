@@ -18,7 +18,7 @@ public interface VoiceStrOrBuilder extends
       getVoiceBytes();
 
   /**
-   * <code>int32 timestamp = 2;</code>
+   * <code>double timestamp = 2;</code>
    */
-  int getTimestamp();
+  double getTimestamp();
 }

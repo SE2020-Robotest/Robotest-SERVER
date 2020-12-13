@@ -21,8 +21,8 @@ private static final long serialVersionUID = 0L;
   }
   private RBPath() {
     pos_ = java.util.Collections.emptyList();
-    starttime_ = 0;
-    endtime_ = 0;
+    starttime_ = 0D;
+    endtime_ = 0D;
   }
 
   @java.lang.Override
@@ -58,14 +58,14 @@ private static final long serialVersionUID = 0L;
                 input.readMessage(msg.grpc.Point.parser(), extensionRegistry));
             break;
           }
-          case 16: {
+          case 17: {
 
-            starttime_ = input.readInt32();
+            starttime_ = input.readDouble();
             break;
           }
-          case 24: {
+          case 25: {
 
-            endtime_ = input.readInt32();
+            endtime_ = input.readDouble();
             break;
           }
           default: {
@@ -140,20 +140,20 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int STARTTIME_FIELD_NUMBER = 2;
-  private int starttime_;
+  private double starttime_;
   /**
-   * <code>int32 starttime = 2;</code>
+   * <code>double starttime = 2;</code>
    */
-  public int getStarttime() {
+  public double getStarttime() {
     return starttime_;
   }
 
   public static final int ENDTIME_FIELD_NUMBER = 3;
-  private int endtime_;
+  private double endtime_;
   /**
-   * <code>int32 endtime = 3;</code>
+   * <code>double endtime = 3;</code>
    */
-  public int getEndtime() {
+  public double getEndtime() {
     return endtime_;
   }
 
@@ -174,11 +174,11 @@ private static final long serialVersionUID = 0L;
     for (int i = 0; i < pos_.size(); i++) {
       output.writeMessage(1, pos_.get(i));
     }
-    if (starttime_ != 0) {
-      output.writeInt32(2, starttime_);
+    if (starttime_ != 0D) {
+      output.writeDouble(2, starttime_);
     }
-    if (endtime_ != 0) {
-      output.writeInt32(3, endtime_);
+    if (endtime_ != 0D) {
+      output.writeDouble(3, endtime_);
     }
     unknownFields.writeTo(output);
   }
@@ -193,13 +193,13 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(1, pos_.get(i));
     }
-    if (starttime_ != 0) {
+    if (starttime_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, starttime_);
+        .computeDoubleSize(2, starttime_);
     }
-    if (endtime_ != 0) {
+    if (endtime_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, endtime_);
+        .computeDoubleSize(3, endtime_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -219,10 +219,14 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && getPosList()
         .equals(other.getPosList());
-    result = result && (getStarttime()
-        == other.getStarttime());
-    result = result && (getEndtime()
-        == other.getEndtime());
+    result = result && (
+        java.lang.Double.doubleToLongBits(getStarttime())
+        == java.lang.Double.doubleToLongBits(
+            other.getStarttime()));
+    result = result && (
+        java.lang.Double.doubleToLongBits(getEndtime())
+        == java.lang.Double.doubleToLongBits(
+            other.getEndtime()));
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -239,9 +243,11 @@ private static final long serialVersionUID = 0L;
       hash = (53 * hash) + getPosList().hashCode();
     }
     hash = (37 * hash) + STARTTIME_FIELD_NUMBER;
-    hash = (53 * hash) + getStarttime();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        java.lang.Double.doubleToLongBits(getStarttime()));
     hash = (37 * hash) + ENDTIME_FIELD_NUMBER;
-    hash = (53 * hash) + getEndtime();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        java.lang.Double.doubleToLongBits(getEndtime()));
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -386,9 +392,9 @@ private static final long serialVersionUID = 0L;
       } else {
         posBuilder_.clear();
       }
-      starttime_ = 0;
+      starttime_ = 0D;
 
-      endtime_ = 0;
+      endtime_ = 0D;
 
       return this;
     }
@@ -504,10 +510,10 @@ private static final long serialVersionUID = 0L;
           }
         }
       }
-      if (other.getStarttime() != 0) {
+      if (other.getStarttime() != 0D) {
         setStarttime(other.getStarttime());
       }
-      if (other.getEndtime() != 0) {
+      if (other.getEndtime() != 0D) {
         setEndtime(other.getEndtime());
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -780,54 +786,54 @@ private static final long serialVersionUID = 0L;
       return posBuilder_;
     }
 
-    private int starttime_ ;
+    private double starttime_ ;
     /**
-     * <code>int32 starttime = 2;</code>
+     * <code>double starttime = 2;</code>
      */
-    public int getStarttime() {
+    public double getStarttime() {
       return starttime_;
     }
     /**
-     * <code>int32 starttime = 2;</code>
+     * <code>double starttime = 2;</code>
      */
-    public Builder setStarttime(int value) {
+    public Builder setStarttime(double value) {
       
       starttime_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 starttime = 2;</code>
+     * <code>double starttime = 2;</code>
      */
     public Builder clearStarttime() {
       
-      starttime_ = 0;
+      starttime_ = 0D;
       onChanged();
       return this;
     }
 
-    private int endtime_ ;
+    private double endtime_ ;
     /**
-     * <code>int32 endtime = 3;</code>
+     * <code>double endtime = 3;</code>
      */
-    public int getEndtime() {
+    public double getEndtime() {
       return endtime_;
     }
     /**
-     * <code>int32 endtime = 3;</code>
+     * <code>double endtime = 3;</code>
      */
-    public Builder setEndtime(int value) {
+    public Builder setEndtime(double value) {
       
       endtime_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 endtime = 3;</code>
+     * <code>double endtime = 3;</code>
      */
     public Builder clearEndtime() {
       
-      endtime_ = 0;
+      endtime_ = 0D;
       onChanged();
       return this;
     }

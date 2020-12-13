@@ -32,12 +32,12 @@ public interface RBPathOrBuilder extends
       int index);
 
   /**
-   * <code>int32 starttime = 2;</code>
+   * <code>double starttime = 2;</code>
    */
-  int getStarttime();
+  double getStarttime();
 
   /**
-   * <code>int32 endtime = 3;</code>
+   * <code>double endtime = 3;</code>
    */
-  int getEndtime();
+  double getEndtime();
 }

@@ -25,7 +25,7 @@ import javafx.application.Platform;
 public class ControlServices extends MsgServicesImplBase{
         Environment Env=Main.Env;
 	private static boolean isstart=true;
-        static int initime=0;
+        static double initime=0;
 	@Override
 	public void robotPosition(RBPosition request, StreamObserver<Response> responseObserver) {
 		/*
@@ -133,6 +133,21 @@ public class ControlServices extends MsgServicesImplBase{
 		System.out.printf("status: %d", status);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
+		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void log(LogStr request, StreamObserver<Response> responseObserver) {
+		/*
+		 * this function is the response function of log message from robot site.
+		 * parameter request is the received robot log string.
+		 * TODO: please implement the functionality of posting robot log message to your program.
+		 */
+		String logstr = request.getLog();
+		System.out.println("get robot log message");
+		System.out.printf("log: %s", logstr);
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();

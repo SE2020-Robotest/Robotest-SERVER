@@ -23,7 +23,7 @@ private static final long serialVersionUID = 0L;
     angle_ = 0D;
     vx_ = 0D;
     vy_ = 0D;
-    timestamp_ = 0;
+    timestamp_ = 0D;
   }
 
   @java.lang.Override
@@ -78,9 +78,9 @@ private static final long serialVersionUID = 0L;
             vy_ = input.readDouble();
             break;
           }
-          case 40: {
+          case 41: {
 
-            timestamp_ = input.readInt32();
+            timestamp_ = input.readDouble();
             break;
           }
           default: {
@@ -164,11 +164,11 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int TIMESTAMP_FIELD_NUMBER = 5;
-  private int timestamp_;
+  private double timestamp_;
   /**
-   * <code>int32 timestamp = 5;</code>
+   * <code>double timestamp = 5;</code>
    */
-  public int getTimestamp() {
+  public double getTimestamp() {
     return timestamp_;
   }
 
@@ -198,8 +198,8 @@ private static final long serialVersionUID = 0L;
     if (vy_ != 0D) {
       output.writeDouble(4, vy_);
     }
-    if (timestamp_ != 0) {
-      output.writeInt32(5, timestamp_);
+    if (timestamp_ != 0D) {
+      output.writeDouble(5, timestamp_);
     }
     unknownFields.writeTo(output);
   }
@@ -226,9 +226,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeDoubleSize(4, vy_);
     }
-    if (timestamp_ != 0) {
+    if (timestamp_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, timestamp_);
+        .computeDoubleSize(5, timestamp_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -263,8 +263,10 @@ private static final long serialVersionUID = 0L;
         java.lang.Double.doubleToLongBits(getVy())
         == java.lang.Double.doubleToLongBits(
             other.getVy()));
-    result = result && (getTimestamp()
-        == other.getTimestamp());
+    result = result && (
+        java.lang.Double.doubleToLongBits(getTimestamp())
+        == java.lang.Double.doubleToLongBits(
+            other.getTimestamp()));
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -290,7 +292,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         java.lang.Double.doubleToLongBits(getVy()));
     hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
-    hash = (53 * hash) + getTimestamp();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        java.lang.Double.doubleToLongBits(getTimestamp()));
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -440,7 +443,7 @@ private static final long serialVersionUID = 0L;
 
       vy_ = 0D;
 
-      timestamp_ = 0;
+      timestamp_ = 0D;
 
       return this;
     }
@@ -537,7 +540,7 @@ private static final long serialVersionUID = 0L;
       if (other.getVy() != 0D) {
         setVy(other.getVy());
       }
-      if (other.getTimestamp() != 0) {
+      if (other.getTimestamp() != 0D) {
         setTimestamp(other.getTimestamp());
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -764,28 +767,28 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int timestamp_ ;
+    private double timestamp_ ;
     /**
-     * <code>int32 timestamp = 5;</code>
+     * <code>double timestamp = 5;</code>
      */
-    public int getTimestamp() {
+    public double getTimestamp() {
       return timestamp_;
     }
     /**
-     * <code>int32 timestamp = 5;</code>
+     * <code>double timestamp = 5;</code>
      */
-    public Builder setTimestamp(int value) {
+    public Builder setTimestamp(double value) {
       
       timestamp_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 timestamp = 5;</code>
+     * <code>double timestamp = 5;</code>
      */
     public Builder clearTimestamp() {
       
-      timestamp_ = 0;
+      timestamp_ = 0D;
       onChanged();
       return this;
     }

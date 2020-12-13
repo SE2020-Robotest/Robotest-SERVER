@@ -36,7 +36,7 @@ public interface RBPositionOrBuilder extends
   double getVy();
 
   /**
-   * <code>int32 timestamp = 5;</code>
+   * <code>double timestamp = 5;</code>
    */
-  int getTimestamp();
+  double getTimestamp();
 }
