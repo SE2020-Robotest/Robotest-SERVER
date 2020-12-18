@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
@@ -29,6 +30,7 @@ import javafx.scene.text.Font;
 public class Main extends Application {
 	Group root = new Group();
 	Environment Env=new Environment(root);
+	Chart Cha=new Chart(root);
 	@Override
 	public void start(Stage primaryStage) {
 //		try {
@@ -38,11 +40,14 @@ public class Main extends Application {
 		Button_type b4 = new Button_type(820, 600, "日志保存");
 		Button_type b5 = new Button_type(1020, 500, "保存文档");
 		Button_type b6 = new Button_type(1020, 600, "构建环境");
-//		Env.Environment_initial(10, 20);
-//		Env.rec(3, 3,5,5,Color.AQUAMARINE);
-//		Env.initial_position(5, 12,0);
-//		Env.temp_position(5, 7,30);
-//		Env.temp_position(7, 16,90);
+		///图表的用例
+		Cha.print_chart(0);
+		Cha.add_data(2, 3, 4, 5, 6,10);
+		Cha.add_data(3, 4, 5, 6, 7,11);
+		Cha.add_data(25.4, 5, 7, 3, 5,21);
+		Cha.print_chart(1);
+		///
+		
 		b1.button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -56,6 +61,12 @@ public class Main extends Application {
 				System.out.println(file.getAbsolutePath());
 				try {
 					Env.read(file);
+					///路径规划显示的用例
+					Env.cal_initial_position(1, 2);
+					Env.cal_temp_position(100, 150);
+					Env.initial_position(2, 3, 45);
+					Env.temp_position(180, 260, 60);
+					///
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -96,24 +107,24 @@ public class Main extends Application {
 		root.getChildren().add(b5.button);
 		root.getChildren().add(b6.button);
 		
-		TextField text=new TextField();
+		TextArea text=new TextArea();
 		Tooltip tip2 = new Tooltip("测试文本框");
 		tip2.setFont(Font.font(40));
 		text.setTooltip(tip2);
 		text.setLayoutX(30);
-		text.setLayoutY(410);
+		text.setLayoutY(500);
 		text.setPrefWidth(550);
-		text.setPrefHeight(350);
-		
-		text.textProperty().addListener(new ChangeListener<String>() {
-
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldvalue, String newvalue) {
-				text.deleteText(0,oldvalue.length());
-				text.appendText(newvalue);
-				// TODO Auto-generated method stub
-				
-			}});
+		text.setPrefHeight(270);
+		text.setWrapText(true);
+//		text.textProperty().addListener(new ChangeListener<String>() {
+//
+//			@Override
+//			public void changed(ObservableValue<? extends String> observable, String oldvalue, String newvalue) {
+//				text.deleteText(0,oldvalue.length());
+//				text.appendText(newvalue);
+//				// TODO Auto-generated method stub
+//				
+//			}});
 		root.getChildren().add(text);
 //		test.setOnKeyPressed(new EventHandler<KeyEvent>(){
 //
