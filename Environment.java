@@ -4,13 +4,17 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -25,6 +29,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+//import msg.grpc.Block;
+//import services.ControlClient;
 
 
 public class Environment {
@@ -44,6 +50,9 @@ double cal_px_temp;
 double cal_py_temp;
 Boolean flag_cal;
 static int H=450;
+int environ_tag;
+int position_tag;
+int posi_rad;
 BufferedWriter bw;
 File temp; 
 //max width : 550
@@ -88,7 +97,7 @@ public void Environment_initial(double x,double y)throws IOException {
 	}
 
 };
-//构造长方形
+//构�?�长方形
 public void rec(double x,double y,double px,double py,Color c) throws IOException{
 	javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle();
 	rec.setX((px-x/2)*Coeff_x+delta_x);
@@ -103,6 +112,7 @@ public void rec(double x,double y,double px,double py,Color c) throws IOExceptio
 };
 //初始位置
 public void initial_position(double x,double y,double angle) {
+	position_tag=Env.getChildren().size()-1;
 	Circle cir = new Circle();
 	px_temp=x*Coeff_x+delta_x;
 	py_temp=Y-y*Coeff_y+delta_y;
@@ -118,7 +128,14 @@ public void initial_position(double x,double y,double angle) {
 	cir2.setFill(Color.RED);
 	Env.getChildren().add(cir2);
 	posi_cir=Env.getChildren().size()-1;
-	
+	Circle cir3 = new Circle();
+	cir3.setCenterX(px_temp);
+	cir3.setCenterY(py_temp);
+	cir3.setRadius(20*Coeff_x);
+	cir3.setFill(Color.valueOf("ff8c0000"));
+	cir3.setStroke(Color.BLACK);
+	Env.getChildren().add(cir3);
+	posi_rad=Env.getChildren().size()-1;
 	Arc arc = new Arc();
 	arc.setCenterX(px_temp);
 	arc.setCenterY(py_temp);
@@ -143,11 +160,16 @@ public void temp_position(double x,double y,double angle) {
 	l.setEndY(py_temp);
 	Env.getChildren().add(l);
 	Circle cir2=(Circle) Env.getChildren().remove(posi_cir);
-	Arc arc=(Arc)Env.getChildren().remove(posi_arc-1);
+	Circle cir3=(Circle) Env.getChildren().remove(posi_rad-1);
+	Arc arc=(Arc)Env.getChildren().remove(posi_arc-2);
 	cir2.setCenterX(px_temp);
 	cir2.setCenterY(py_temp);
 	Env.getChildren().add(cir2);
 	posi_cir=Env.getChildren().size()-1;
+	cir3.setCenterX(px_temp);
+	cir3.setCenterY(py_temp);
+	Env.getChildren().add(cir3);
+	posi_rad=Env.getChildren().size()-1;
 	arc.setCenterX(px_temp);
 	arc.setCenterY(py_temp);
 	arc.setStartAngle(angle-22.5);
@@ -185,6 +207,7 @@ public void save(File fd)throws Exception {
 };
 //读取配置文档
 public void read(File fd) throws IOException{
+	environ_tag=Env.getChildren().size()-1;
 	FileReader fr = new FileReader(fd);
 	BufferedReader br = new BufferedReader(fr);
 	String line = "";
@@ -202,9 +225,54 @@ public void read(File fd) throws IOException{
 		
 	}
 };
-//发送配置文件
-public void send() {};
-//路径规划初始化
+//发�?�配置文�?
+public int send(File file) {
+        int tag=0;
+       /* ArrayList<Block> blocks = new ArrayList<Block>();
+        double roomwidth = 0;
+        double roomlength = 0;
+        //open file
+        System.out.println(file.getAbsolutePath());
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line = "";
+            String[] arrs = null;
+            if ((line = br.readLine()) != null) {
+                arrs = line.split(" ");
+                roomwidth = Double.parseDouble(arrs[1]);
+                roomlength = Double.parseDouble(arrs[3]);
+            }
+            while ((line = br.readLine()) != null) {
+                arrs = line.split(" ");
+                double type = Double.parseDouble(arrs[0]);
+                ControlClient.BlockType btype;
+                if (type == 1) {
+                    btype = ControlClient.BlockType.CUBE;
+                } else {
+                    btype = ControlClient.BlockType.CYLINDER;
+                }
+                blocks.add(ControlClient.SetBlock(btype,
+                        Double.parseDouble(arrs[1]),
+                        Double.parseDouble(arrs[2]),
+                        Double.parseDouble(arrs[3]),
+                        Double.parseDouble(arrs[4])));
+            }
+            //send config
+            
+            //tag+=ControlClient.SendConfigMap(ControlClient.Receiver.AR, roomwidth, roomlength, blocks);
+            tag+=ControlClient.SendConfigMap(ControlClient.Receiver.ROBOT, roomwidth, roomlength, blocks);
+            br.close();
+            fr.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Environment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ;*/
+        return tag;
+    }
+//路径规划初始�?
 public void cal_initial_position(double x,double y) {
 	cal_px_temp=x*Coeff_x+delta_x;
 	cal_py_temp=Y-y*Coeff_y+delta_y;
@@ -221,5 +289,16 @@ public void cal_temp_position(double x,double y) {
 	l.setStroke(Paint.valueOf("#0000FF"));
 	Env.getChildren().add(l);
 }
-
+public void remove_positon() {
+	for(int index=position_tag;index<Env.getChildren().size();)
+	{
+	Env.getChildren().remove(index+1);
+	}
+}
+public void remove_all() {
+	for(int index=environ_tag;index<Env.getChildren().size();)
+	{
+	Env.getChildren().remove(index+1);
+	}
+}
 };
