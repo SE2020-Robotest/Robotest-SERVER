@@ -21,11 +21,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import msg.grpc.LogStr;
 
 public class ControlServices extends MsgServicesImplBase{
         Environment Env=Main.Env;
-	private static boolean isstart=true;
-        static double initime=0;
+	private static boolean isStart=true;
+        static double iniTime=0;
 	@Override
 	public void robotPosition(RBPosition request, StreamObserver<Response> responseObserver) {
 		/*
@@ -34,10 +35,15 @@ public class ControlServices extends MsgServicesImplBase{
 		 * TODO: please implement the functionality of posting RBPosition message to your program.
 		 * */
 		// the following code shows how to operate the data structure RBPosition
+                if(Main.haveMap==false||Main.onExp==false){
+                    Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
+                    responseObserver.onNext(response);
+                    responseObserver.onCompleted();
+                    return;}
 		Point point = request.getPos();
 		double posx = point.getPosx();
 		double posy = point.getPosy();
-		double angle = request.getAngle();
+		double angle = (request.getAngle()*180/3.1415926)%360;
                 
 		double vx = request.getVx();
 		double vy = request.getVy();
@@ -45,16 +51,16 @@ public class ControlServices extends MsgServicesImplBase{
 		//System.out.printf("posx:%.2f\n posy:%.2f\n angle:%.2f\n vx:%.2f\n vy:%.2f\n timestamp:%d\n",posx, posy, angle, vx, vy, timestamp);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
-                Main.setofp.add(new Main.pointi(posx,posy,angle,vx,vy,timestamp));
+                Main.setOfPoints.add(new Main.Point(posx,posy,angle,vx,vy,timestamp));
                 
-                if(isstart==true)
+                if(isStart==true)
                 {   Platform.runLater(()->{Env.initial_position(posx,posy,angle);});
-                    initime=timestamp;
-                    isstart=false;
+                    iniTime=timestamp;
+                    isStart=false;
                 }
                 else 
                     Platform.runLater(()->{Env.temp_position(posx,posy,angle);});
-                Platform.runLater(()->{Main.Cha.add_data(timestamp-initime, posx, posy, vx, vy, angle);});
+                Platform.runLater(()->{Main.Cha.add_data(timestamp-iniTime, posx, posy, vx, vy, angle);});
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
@@ -68,10 +74,10 @@ public class ControlServices extends MsgServicesImplBase{
 		 * TODO: please implement the functionality of posting RBPath message to your program.
 		 * */
 		// the following code shows how to operate the data structure RBPath
-                ArrayList<Main.pot> apath=new ArrayList<Main.pot>();
+                ArrayList<Main.PointInPath> apath=new ArrayList<Main.PointInPath>();
 		double starttime = request.getStarttime();
 		double endtime = request.getEndtime();
-		System.out.printf("start time: %d, end time: %d", starttime, endtime);
+		//System.out.printf("start time: %d, end time: %d", starttime, endtime);
 		List<Point> points = request.getPosList();
                 boolean isstart2=true;
 		for(Point point:points) {
@@ -81,14 +87,14 @@ public class ControlServices extends MsgServicesImplBase{
                         }
                         else
                             Platform.runLater(()->{Env.cal_temp_position(point.getPosx(), point.getPosy());});
-			System.out.printf("position x: %.2f, position y: %.2f\n", point.getPosx(), point.getPosy());
-                        apath.add(new Main.pot(point.getPosx(), point.getPosy()));
+			//System.out.printf("position x: %.2f, position y: %.2f\n", point.getPosx(), point.getPosy());
+                        apath.add(new Main.PointInPath(point.getPosx(), point.getPosy()));
 		}
-                Main.setofpath.add(apath);
+                Main.setOfPaths.add(apath);
 		int len = request.getPosCount();
 		for(int i = 0;i<len;i++) {
 			Point point = request.getPos(i);
-			System.out.printf("index: %d, position x: %.2f, position y: %.2f\n", i, point.getPosx(), point.getPosy());
+			//System.out.printf("index: %d, position x: %.2f, position y: %.2f\n", i, point.getPosx(), point.getPosy());
 		}
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
@@ -106,7 +112,9 @@ public class ControlServices extends MsgServicesImplBase{
 		 * */
 		// the following code shows how to operate the parameter VoiceStr
 		String voicestr = request.getVoice();
-                Main.voiceresult.add(voicestr);
+                Main.voiceResultList.add(voicestr);
+                Main.vrText.appendText(voicestr);
+                Main.vrText.appendText("\n");
 		System.out.printf("voice recognition result: %s\n", voicestr);
 		// the following code returns the Response response to the client.
 		// if the received message goes wrong, please modify OK to Error.
@@ -137,7 +145,7 @@ public class ControlServices extends MsgServicesImplBase{
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
 	}
-
+        
 	@Override
 	public void log(LogStr request, StreamObserver<Response> responseObserver) {
 		/*
@@ -146,8 +154,10 @@ public class ControlServices extends MsgServicesImplBase{
 		 * TODO: please implement the functionality of posting robot log message to your program.
 		 */
 		String logstr = request.getLog();
-		System.out.println("get robot log message");
-		System.out.printf("log: %s", logstr);
+                Main.logText.appendText(logstr);
+                Main.logText.appendText("\n");
+		//System.out.println("get robot log message");
+		//System.out.printf("log: %s", logstr);
 		Response response = Response.newBuilder().setStatus(Response.Status.OK).build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();

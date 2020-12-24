@@ -11,24 +11,57 @@ import msg.grpc.MsgServicesGrpc;
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ControlClient {
+
+    static{
+        FileReader fr=null;
+        try {
+            File setting=new File("./setting.txt");
+            fr = new FileReader(setting);
+            BufferedReader br = new BufferedReader(fr);
+            robotIp=br.readLine();
+            arIp=br.readLine();
+            br.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ControlClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ControlClient.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ControlClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 	public static enum Receiver{
 		AR, CONTROL, ROBOT
 	};
-	private static Map<Receiver, String> IPs;
+	public static Map<Receiver, String> IPs;
 	private static Map<Receiver, Integer> Ports;
+        public static String robotIp;
+        public static String arIp;
+        public static String controlIp="11.11.11.11";
 	static {
 		IPs = new HashMap<Receiver, String>();
-			IPs.put(Receiver.AR, "localhost");
-			IPs.put(Receiver.CONTROL, "183.172.220.1");
-                        IPs.put(Receiver.ROBOT, "59.66.190.24");
+			IPs.put(Receiver.AR, arIp);
+			IPs.put(Receiver.CONTROL, controlIp);
+                        IPs.put(Receiver.ROBOT, robotIp);
 		Ports = new HashMap<Receiver, Integer>();
-			Ports.put(Receiver.AR, 8888);
+			Ports.put(Receiver.AR, 8960);
 			Ports.put(Receiver.CONTROL, 8889);
 			Ports.put(Receiver.ROBOT, 8888);
 	}
@@ -97,12 +130,15 @@ public class ControlClient {
 			command = ControlCmd.CtrlCmd.CONNECT;
 		}
 		ControlCmd request = ControlCmd.newBuilder().setCmd(command).build();
+                
 		ManagedChannel channel = ManagedChannelBuilder.forAddress(ip,port).usePlaintext().build();
+                
 		MsgServicesBlockingStub stub = MsgServicesGrpc.newBlockingStub(channel);
                 
 		Response response = stub.controlCommand(request);
                 
 		return response.getStatusValue();
+                
 	}
         
         public static enum DriveCommand{
@@ -135,7 +171,7 @@ public class ControlClient {
 			command = Drive.DriveCmd.ANTICLOCKWISE;
 		}
 		Drive request = Drive.newBuilder().setDrivecmd(command).build();
-		ManagedChannel channel = ManagedChannelBuilder.forAddress(ip,port).usePlaintext().build();
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(ip,port).usePlaintext().build();
 		MsgServicesBlockingStub stub = MsgServicesGrpc.newBlockingStub(channel);
 		Response response = stub.driveRobot(request);
 		return response.getStatusValue();

@@ -11,9 +11,7 @@ import application.Main;
  */
 public class Test {
         Environment Env=Main.Env;
-    public void change(){
+    public static void main(String[] args){
         
-         Env.initial_position(30, 40, 1.2);
-         Env.temp_position(50,60,0.1);
     }
 }
