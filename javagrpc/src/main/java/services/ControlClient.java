@@ -61,7 +61,7 @@ public class ControlClient {
 			IPs.put(Receiver.CONTROL, controlIp);
                         IPs.put(Receiver.ROBOT, robotIp);
 		Ports = new HashMap<Receiver, Integer>();
-			Ports.put(Receiver.AR, 8960);
+			Ports.put(Receiver.AR, 8990);
 			Ports.put(Receiver.CONTROL, 8889);
 			Ports.put(Receiver.ROBOT, 8888);
 	}

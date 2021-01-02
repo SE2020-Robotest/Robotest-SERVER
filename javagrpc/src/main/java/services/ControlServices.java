@@ -25,7 +25,7 @@ import msg.grpc.LogStr;
 
 public class ControlServices extends MsgServicesImplBase{
         Environment Env=Main.Env;
-	private static boolean isStart=true;
+	public static boolean isStart=true;
         static double iniTime=0;
 	@Override
 	public void robotPosition(RBPosition request, StreamObserver<Response> responseObserver) {
