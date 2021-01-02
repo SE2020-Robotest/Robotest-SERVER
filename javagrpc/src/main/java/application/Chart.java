@@ -110,13 +110,15 @@ public void print_chart(int flag) {
 		axis_y.setTickUnit(30);
 		}
 	if (flag==3) {
-		double t=(double)px.getData().get(px.getData().size()-1).getXValue();
+		//double t=(double)px.getData().get(px.getData().size()-1).getXValue();
 		px.getData().clear();
 		py.getData().clear();
 		vx.getData().clear();
 		vy.getData().clear();
 		ang.getData().clear();
-		axis_x.setLowerBound((int)t-2);
+		//axis_x.setLowerBound((int)t-2);
+                axis_x.setLowerBound(0);
+                axis_x.setUpperBound(20);
 	}
 };
 }

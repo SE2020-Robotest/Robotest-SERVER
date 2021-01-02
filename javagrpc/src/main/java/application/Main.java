@@ -45,7 +45,7 @@ public class Main extends Application {
     Button_type loadData;
     Button_type keyDrive;
     Button_type setIp;
-    public void sleep(int time){try{Thread.sleep(1000*time);System.out.println("i wake up!");}catch(Throwable e){};}
+    public void sleep(int time){try{Thread.sleep(1000*time);}catch(Throwable e){};}
     void autoTest(){
         sleep(1);
         Platform.runLater(()->{connect.button.fireEvent(new ActionEvent());});
@@ -74,6 +74,8 @@ public class Main extends Application {
         vrText.clear();
         logText.clear();
         Env.remove_positon(); 
+        Cha.print_chart(3);
+        ControlServices.isStart=true;
     }
     private boolean firstConnect=true;
     private boolean cmdDrive=false;
@@ -483,7 +485,7 @@ public class Main extends Application {
                                //Thread.sleep(10);
                                
                            }
-                           System.out.println("||");
+                           //System.out.println("||");
                            
                            for(ArrayList<PointInPath>pp2:ppp2){
                                boolean tag2=true;
@@ -496,7 +498,7 @@ public class Main extends Application {
                                        Env.cal_temp_position(p2.posx, p2.posy);
                                    
                                }
-                               System.out.println("apath read");
+                               //System.out.println("apath read");
                            }
                            in.close();
                            fileIn.close();
@@ -571,9 +573,8 @@ public class Main extends Application {
                 });
 		Scene scene = new Scene(root,1200,800);
 		System.out.println(root);
-		//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("demo");
+		primaryStage.setTitle("机器人交互实验平台");
 		primaryStage.show();
                 if(isTest)
                     new Thread(new Runnable(){public void run(){autoTest();}}).start();
